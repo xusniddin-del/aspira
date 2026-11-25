@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Kabinetim</title>
+<meta name="theme-color" content="#F4F7FC">
+<meta name="robots" content="noindex">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b500:#047DFF;--b600:#0069F9;--b700:#0057D6;--b50:#EAF3FF;--b100:#D3E6FF;--ink:#0B1B3A;--muted:#5E6B83;--line:#E3E9F3;--bg:#F4F7FC;--ok:#067647;--oksoft:#E6F6EE;--bad:#B42318;--badsoft:#FEF0EF;--warn:#B54708;--warnsoft:#FFF4E5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Manrope,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:15px;min-height:100vh}
+.wrap{max-width:520px;margin:0 auto;padding:14px 16px calc(30px + env(safe-area-inset-bottom))}
+.mut{color:var(--muted);font-weight:600}
+.top{display:flex;align-items:center;gap:12px;padding:6px 2px 16px}
+.top .av{width:46px;height:46px;border-radius:15px;background:linear-gradient(180deg,#3F9BFF,#0069F9);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px;flex:none;box-shadow:0 8px 18px rgba(4,125,255,.3)}
+.top small{display:block;font-size:12.5px;color:var(--muted);font-weight:700}
+.top b{display:block;font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 1px 2px rgba(11,27,58,.04),0 8px 24px rgba(11,27,58,.05);margin-bottom:12px}
+.next{background:linear-gradient(140deg,#1C7BFF 0%,#0057D6 100%);color:#fff;border-radius:22px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;box-shadow:0 18px 40px -12px rgba(4,100,240,.5)}
+.next:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 65%);right:-70px;top:-90px}
+.next small{font-size:12.5px;font-weight:700;opacity:.8}
+.next .d{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+.next .t{font-size:15px;font-weight:700;opacity:.92;margin-top:2px}
+.next .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.next .pill{background:rgba(255,255,255,.18);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:700}
+.empty-next{background:#fff;border:1px dashed var(--b100);border-radius:20px;padding:16px;margin-bottom:12px;display:flex;gap:12px;align-items:center}
+.empty-next .ic{width:40px;height:40px;border-radius:12px;background:var(--b50);color:var(--b600);display:grid;place-items:center;flex:none}
+.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.fin div{background:#fff;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(11,27,58,.04)}
+.fin small{display:block;font-size:11.5px;color:var(--muted);font-weight:700}
+.fin b{display:block;font-size:16px;font-weight:800;margin-top:3px;white-space:nowrap}.fin b em{font-style:normal;font-size:11px;color:var(--muted);font-weight:700;margin-left:2px}
+.tabs{display:flex;gap:4px;background:#fff;border-radius:14px;padding:4px;margin:6px 0 12px;box-shadow:0 1px 2px rgba(11,27,58,.04)}
+.tabs button{flex:1;border:0;background:none;padding:9px 6px;border-radius:10px;font:inherit;font-weight:700;font-size:13.5px;color:var(--muted);cursor:pointer}
+.tabs button.on{background:var(--b50);color:var(--b700)}
+.item{padding:13px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}.item:first-child{padding-top:2px}
+.item .h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item b{font-weight:800}
+.item p{font-size:13.5px;color:var(--muted);font-weight:600;margin-top:4px;line-height:1.45}
+.tag{display:inline-flex;font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.t-new{background:var(--b50);color:var(--b700)}.t-came{background:var(--warnsoft);color:var(--warn)}.t-done{background:var(--oksoft);color:var(--ok)}.t-noshow{background:var(--badsoft);color:var(--bad)}
+.teeth{background:var(--bg);border-radius:14px;padding:12px 4px;overflow-x:auto}
+.jaw{display:flex;justify-content:center;gap:1px;min-width:max-content}
+.jaw+.jaw{margin-top:10px;padding-top:10px;border-top:1px dashed #CBD3E1}
+.jaw .mid{width:6px}
+.tooth{display:flex;flex-direction:column;align-items:center;gap:2px}
+.tooth svg{width:18px;height:22px}.tooth span{font-size:9px;font-weight:800;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.legend span{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:9px;padding:5px 9px;font-size:12px;font-weight:700;background:#fff}
+.legend i{width:12px;height:12px;border-radius:4px;border:1px solid rgba(0,0,0,.15)}
+.clinic{display:flex;gap:12px;align-items:center}
+.clinic .ic{width:42px;height:42px;border-radius:13px;background:var(--b50);color:var(--b600);display:grid;place-items:center;flex:none}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border-radius:14px;border:0;font:inherit;font-weight:800;font-size:15.5px;cursor:pointer;background:linear-gradient(180deg,#3F9BFF,#0069F9);color:#fff;box-shadow:0 10px 24px rgba(4,125,255,.35);text-decoration:none}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.btn:disabled{opacity:.6}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.center{text-align:center}
+.hero{padding:40px 10px 20px;text-align:center}
+.hero .logo{width:84px;height:84px;border-radius:26px;background:linear-gradient(180deg,#3F9BFF,#0069F9);display:grid;place-items:center;margin:0 auto 20px;box-shadow:0 16px 34px rgba(4,125,255,.35)}
+.hero .logo svg{height:48px;width:auto}
+.hero h1{font-size:23px;font-weight:800;letter-spacing:-.02em}
+.hero p{color:var(--muted);font-weight:600;margin:10px auto 24px;max-width:340px;line-height:1.55}
+.seg{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}
+.seg button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-weight:700;font-size:13px;white-space:nowrap;cursor:pointer}
+.seg button.on{border-color:var(--b600);background:var(--b50);color:var(--b700)}
+.demo{background:var(--warnsoft);color:var(--warn);border-radius:12px;padding:9px 12px;font-weight:700;font-size:12.5px;margin-bottom:12px;text-align:center}
+.foot{text-align:center;font-size:11.5px;color:#98A2B3;font-weight:700;margin-top:18px}
+.spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--b100);border-top-color:var(--b600);animation:sp .8s linear infinite;margin:40vh auto 0}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="spin"></div></div>
+<script>
+/* Aspira — bemor kabineti (Telegram Mini App). Klinika botidagi «Kabinetim» tugmasi shu sahifani ochadi.
+   Ma'lumot faqat Telegram tasdiqlagan foydalanuvchiga va faqat o'zi haqida beriladi. */
+const tw = window.Telegram && Telegram.WebApp;
+const API = new URLSearchParams(location.search).get('u');
+const DEMO = !API || !tw || !tw.initData;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = n => String(Math.round(+n||0)).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+const money = n => num(n)+" so'm";
+const MONTHS = ['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
+const WD = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+const dLong = s => { const d=new Date(s+'T00:00'); return d.getDate()+'-'+MONTHS[d.getMonth()]+', '+WD[d.getDay()]; };
+const dShort = s => s ? s.slice(8,10)+'.'+s.slice(5,7)+'.'+s.slice(0,4) : '—';
+const STATUS = {new:'Kutilmoqda',came:'Keldi',done:'Bajarildi',noshow:'Kelmadi'};
+const METHODS = {naqd:'Naqd',karta:'Karta',click:'Click',payme:'Payme'};
+const IC = {cal:'<rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>',phone:'<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/>',pin:'<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>'};
+const ic = n => `<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
+const MARK = `<svg viewBox="54.6 37.4 119.2 140.9" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" fill-rule="evenodd" d="M79.42 73.25 L73.58 76.00 L68.08 79.67 L63.67 83.92 L60.17 88.67 L58.17 92.58 L56.17 99.42 L55.58 103.17 L55.67 110.58 L57.00 117.58 L59.17 124.00 L61.33 128.50 L65.83 135.75 L69.50 140.58 L73.92 145.50 L81.67 153.25 L89.17 159.50 L90.42 159.67 L92.17 158.83 L106.50 149.25 L117.83 140.17 L123.17 135.08 L123.75 133.50 L123.08 132.42 L115.17 126.92 L113.58 126.25 L111.33 126.17 L109.17 126.92 L102.08 131.83 L94.67 136.25 L93.25 136.50 L91.83 135.75 L85.50 128.75 L80.75 122.50 L78.33 118.00 L76.75 113.42 L76.17 109.58 L76.75 103.42 L79.08 98.50 L82.58 94.75 L88.08 91.83 L91.42 91.25 L95.00 91.25 L97.67 91.58 L101.25 92.67 L110.17 96.75 L116.00 97.08 L119.75 96.17 L128.33 92.25 L132.92 91.33 L137.25 91.33 L141.75 92.42 L145.50 94.67 L147.67 96.58 L149.42 98.83 L151.17 102.33 L152.00 105.83 L152.08 109.58 L150.58 116.50 L147.75 122.25 L141.50 130.58 L131.75 140.75 L121.17 149.92 L108.00 159.58 L99.58 164.92 L98.67 166.00 L98.67 166.92 L99.42 167.92 L106.92 173.33 L113.17 177.17 L115.33 177.08 L119.75 174.50 L127.75 168.92 L138.08 160.83 L150.17 149.83 L157.92 141.58 L161.75 136.83 L165.58 131.00 L168.75 124.92 L171.67 116.67 L172.75 110.25 L172.75 103.50 L172.33 99.67 L170.92 94.50 L169.67 91.25 L166.92 86.75 L164.33 83.42 L160.75 80.00 L154.83 75.92 L149.17 73.25 L145.42 72.17 L139.75 71.33 L133.75 71.50 L125.92 73.17 L119.25 75.67 L114.25 76.33 L109.58 75.83 L101.67 73.00 L93.17 71.42 L84.92 71.83ZM112.17 38.50 L109.83 39.00 L106.33 40.42 L104.08 42.00 L101.58 44.58 L99.42 48.25 L98.67 50.50 L98.25 53.17 L98.42 57.17 L100.58 62.83 L102.25 65.00 L105.50 67.83 L108.42 69.33 L111.08 70.08 L116.17 70.25 L121.50 68.67 L125.17 66.08 L127.08 63.92 L129.58 58.75 L130.17 55.17 L130.08 52.83 L129.50 49.75 L128.42 47.00 L126.08 43.67 L121.92 40.33 L119.00 39.08 L116.50 38.50Z"/></svg>`;
+const TS = {healthy:{t:"Sog'lom",c:'#FFFFFF'},caries:{t:'Karies',c:'#FDE68A'},treat:{t:'Davolanmoqda',c:'#FECACA'},filled:{t:'Plomba',c:'#BFDBFE'},rct:{t:'Kanal davolangan',c:'#DDD6FE'},crown:{t:'Koronka',c:'#FBCFE8'},implant:{t:'Implant',c:'#A7F3D0'},missing:{t:'Olingan',c:'none'}};
+const UP=[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28], DN=[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
+const S = {d:null, i:0, tab:'hist'};
+
+if (tw) { try { tw.ready(); tw.expand(); tw.setHeaderColor && tw.setHeaderColor('#F4F7FC'); tw.setBackgroundColor && tw.setBackgroundColor('#F4F7FC'); } catch(e){} }
+
+async function call(extra){
+  const r = await fetch(API, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action:'cabinet', initData:tw.initData, ...extra})});
+  return r.json();
+}
+function demoData(){
+  const t=new Date(); const iso=d=>d.toISOString().slice(0,10); const add=n=>{const d=new Date(t); d.setDate(d.getDate()+n); return iso(d);};
+  return {ok:true, linked:true, demo:true, clinic:{name:'Nur Dental', phone:'+998 73 244 55 66', address:"Marg'ilon sh., Mustaqillik ko'chasi 12", bot:'nurdental_bot'}, modules:{dental:true,kassa:true},
+    patients:[{name:'Dilnoza Rahimova', phone:'+998 90 111 22 33', birth:'1998-04-12', teeth:{16:'filled',26:'caries',36:'rct',46:'crown',18:'missing'},
+      upcoming:[{date:add(1), time:'10:00', dur:30, status:'new', doctor:'Dr. Aziz Karimov', services:['Kanal davolash'], total:0, diag:''}],
+      history:[{date:add(-6), time:'15:30', status:'done', doctor:'Dr. Aziz Karimov', services:['Karies davolash (plomba)'], total:350000, diag:'16-tishga plomba qo\'yildi, 26-tishda karies — keyingi qabulda davolanadi.'},
+               {date:add(-30), time:'11:00', status:'done', doctor:'Dr. Aziz Karimov', services:['Konsultatsiya','Rentgen snimok'], total:90000, diag:'Ko\'rik o\'tkazildi, davolash rejasi tuzildi.'},
+               {date:add(-44), time:'09:30', status:'noshow', doctor:'Dr. Malika Yusupova', services:['Professional tish tozalash'], total:0, diag:''}],
+      payments:[{date:add(-6), time:'15:55', amount:200000, method:'click'},{date:add(-30), time:'11:25', amount:90000, method:'naqd'}],
+      fin:{charged:440000, paid:290000, debt:150000}}]};
+}
+async function start(){
+  if (DEMO) { S.d = demoData(); return render(); }
+  try { S.d = await call({}); } catch(e){ S.d = {ok:false, msg:"Internet bilan aloqa yo'q"}; }
+  render();
+}
+function render(){
+  const d=S.d, app=$('#app');
+  if (!d.ok) { app.innerHTML = `<div class="hero"><div class="logo">${MARK}</div><h1>${esc(d.clinic&&d.clinic.name||'Kabinet')}</h1><p>${esc(d.msg||'Xatolik yuz berdi')}</p><button class="btn ghost" onclick="location.reload()">Qayta urinish</button></div>`; return; }
+  if (!d.linked) {
+    app.innerHTML = `<div class="hero"><div class="logo">${MARK}</div><h1>${esc(d.clinic.name)}</h1>
+      <p>${d.notFound?`Raqamingiz klinika bazasida topilmadi. Qabulga yozilganingizdan keyin yana urinib ko'ring.${d.clinic.phone?`<br><br>Qabulga yozilish: <b style="color:var(--ink)">${esc(d.clinic.phone)}</b>`:''}`:'Shaxsiy kabinetingizni ochish uchun telefon raqamingizni tasdiqlang. Qabullaringiz, to\'lovlaringiz va tish xaritangizni ko\'rasiz.'}</p>
+      <button class="btn" id="cb" onclick="shareContact()">📱 Raqamni tasdiqlash</button>
+      ${d.notFound&&d.clinic.phone?`<a class="btn ghost" style="margin-top:10px" href="tel:${esc(d.clinic.phone.replace(/\D/g,''))}">${ic('phone')}Qo'ng'iroq qilish</a>`:''}
+      <p style="font-size:12px;margin-top:16px">Raqamingiz faqat sizni klinika bazasida topish uchun ishlatiladi.</p></div>`;
+    return;
+  }
+  const P = d.patients[S.i] || d.patients[0], nx = P.upcoming[0];
+  const tabs=[['hist','Tashriflar'],...(d.modules.kassa?[['pay',"To'lovlar"]]:[]),...(d.modules.dental&&P.teeth?[['teeth','Tish xaritasi']]:[])];
+  if (!tabs.find(t=>t[0]===S.tab)) S.tab='hist';
+  const age = P.birth ? Math.floor((Date.now()-new Date(P.birth+'T00:00'))/31557600000) : null;
+  let body='';
+  if (S.tab==='hist') body = P.history.length ? P.history.map(a=>`<div class="item"><div class="h"><b>${dShort(a.date)} · ${esc(a.time)}</b><span class="tag t-${a.status}">${STATUS[a.status]||a.status}</span></div>
+      <p>${esc(a.doctor)}${a.services.length?' · '+esc(a.services.join(', ')):''}${a.total?` · <b style="color:var(--ink);white-space:nowrap">${money(a.total)}</b>`:''}</p>${a.diag?`<p style="color:var(--ink)">${esc(a.diag)}</p>`:''}</div>`).join('') : '<p class="mut center" style="padding:16px 0">Hali tashrif yo\'q</p>';
+  if (S.tab==='pay') body = P.payments.length ? P.payments.map(x=>`<div class="item"><div class="h"><b>${money(x.amount)}</b><span class="mut">${METHODS[x.method]||esc(x.method)}</span></div><p>${dShort(x.date)} ${esc(x.time)}</p></div>`).join('') : '<p class="mut center" style="padding:16px 0">To\'lov yo\'q</p>';
+  if (S.tab==='teeth') body = teeth(P.teeth);
+  $('#app').innerHTML = `${d.demo?'<div class="demo">Demo ko\'rinish — klinika botida o\'z ma\'lumotlaringiz chiqadi</div>':''}
+    <div class="top"><div class="av">${esc(P.name.split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase())}</div><div><small>${esc(d.clinic.name)}</small><b>${esc(P.name)}</b><small style="margin-top:2px">${esc(P.phone)}${age!=null?' · '+age+' yosh':''}</small></div></div>
+    ${d.patients.length>1?`<div class="seg">${d.patients.map((x,i)=>`<button class="${i===S.i?'on':''}" onclick="S.i=${i};render()">${esc(x.name.split(' ')[0])}</button>`).join('')}</div>`:''}
+    ${nx?`<div class="next"><small>Keyingi qabulingiz</small><div class="d">${dLong(nx.date)}</div><div class="t">soat ${esc(nx.time)} · ${esc(nx.doctor)}</div>
+      <div class="row">${nx.services.map(s=>`<span class="pill">${esc(s)}</span>`).join('')}${P.upcoming.length>1?`<span class="pill">+${P.upcoming.length-1} ta yana</span>`:''}</div></div>`
+      :`<div class="empty-next"><span class="ic">${ic('cal')}</span><div><b>Rejalashtirilgan qabul yo'q</b><div class="mut" style="font-size:13px;margin-top:2px">Qabulga yozilish uchun klinikaga qo'ng'iroq qiling</div></div></div>`}
+    ${P.fin?`<div class="fin"><div><small>Jami xizmat</small><b>${num(P.fin.charged)}<em>so'm</em></b></div><div><small>To'langan</small><b style="color:var(--ok)">${num(P.fin.paid)}<em>so'm</em></b></div><div><small>Qarz</small><b style="color:${P.fin.debt?'var(--bad)':'inherit'}">${num(P.fin.debt)}<em>so'm</em></b></div></div>`:''}
+    <div class="tabs">${tabs.map(([k,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';render()">${t}</button>`).join('')}</div>
+    <div class="card">${body}</div>
+    <div class="card clinic"><span class="ic">${ic('pin')}</span><div style="flex:1;min-width:0"><b>${esc(d.clinic.name)}</b><div class="mut" style="font-size:13px">${esc(d.clinic.address||'')}</div></div>
+      ${d.clinic.phone?`<a class="btn" style="width:auto;height:44px;padding:0 14px" href="tel:${esc(d.clinic.phone.replace(/\D/g,''))}">${ic('phone')}</a>`:''}</div>
+    <div class="foot">Aspira orqali ishlaydi</div>`;
+}
+function toothSvg(st, up){
+  const c=(TS[st]||TS.healthy).c, miss=st==='missing';
+  const p = up ? 'M6 4c2-2 4-1 8-1s6-1 8 1c2 3 1 7-1 10-1 2-1 6-2 12-.5 3-2 3-2.5 0l-1-7c-.3-1.5-2.7-1.5-3 0l-1 7c-.5 3-2 3-2.5 0-1-6-1-10-2-12C5 11 4 7 6 4z'
+              : 'M6 28c2 2 4 1 8 1s6 1 8-1c2-3 1-7-1-10-1-2-1-6-2-12-.5-3-2-3-2.5 0l-1 7c-.3 1.5-2.7 1.5-3 0l-1-7c-.5-3-2-3-2.5 0-1 6-1 10-2 12-2 3-3 7-1 10z';
+  return `<svg viewBox="0 0 28 32"><path d="${p}" fill="${miss?'none':c}" stroke="${miss?'#98A2B3':'#7C8BA8'}" stroke-width="1.3" ${miss?'stroke-dasharray="2.5 2"':''}/></svg>`;
+}
+function teeth(T){
+  const jaw=(arr,up)=>`<div class="jaw">${arr.map((n,i)=>`${i===8?'<span class="mid"></span>':''}<div class="tooth">${up?'':`<span>${n}</span>`}${toothSvg(T[n],up)}${up?`<span>${n}</span>`:''}</div>`).join('')}</div>`;
+  const used=[...new Set(Object.values(T))];
+  return `<div class="teeth">${jaw(UP,true)}${jaw(DN,false)}</div>${used.length?`<div class="legend">${used.map(k=>TS[k]?`<span><i style="background:${TS[k].c==='none'?'#fff':TS[k].c};${k==='missing'?'border-style:dashed':''}"></i>${TS[k].t} · ${Object.values(T).filter(x=>x===k).length}</span>`:'').join('')}</div>`:'<p class="mut center" style="margin-top:12px">Hamma tishlar sog\'lom ✓</p>'}`;
+}
+function shareContact(){
+  const b=$('#cb'); if (DEMO) return; b.disabled=true;
+  if (!tw.requestContact) { b.disabled=false; return tw.showAlert ? tw.showAlert("Telegram ilovangizni yangilang") : alert("Telegram ilovangizni yangilang"); }
+  tw.requestContact(async (shared, res) => {
+    if (!shared) { b.disabled=false; return; }
+    const signed = res && (res.response || (typeof res==='string'?res:null));
+    if (!signed) { b.disabled=false; return tw.showAlert("Telegram ilovangizni yangilang"); }
+    b.textContent='Tekshirilmoqda…';
+    try { S.d = await call({contact: signed}); } catch(e){ S.d={ok:false,msg:"Internet bilan aloqa yo'q"}; }
+    render();
+  });
+}
+start();
+</script>
+</body>
+</html>

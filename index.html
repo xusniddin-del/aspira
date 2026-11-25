@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aspira — Klinika boshqaruvi</title>
+<meta name="theme-color" content="#0069F9">
+<meta name="description" content="Klinika uchun qabul, bemorlar, kassa va hisobotlar — bitta oynada.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F7FC;--card:#fff;--ink:#0B1B3A;--ink2:#344054;--muted:#55627A;--line:#E3E9F3;
+  --blue:#0069F9;--blue-d:#0057D6;--blue-50:#EAF3FF;--blue-100:#D3E6FF;--brand:#047DFF;
+  --green:#067647;--green-50:#E6F6EE;--red:#D92D20;--red-50:#FEF0EF;--amber:#B54708;--amber-50:#FFF4E5;--violet:#7A5AF8;
+  --r:16px;--sh:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Manrope,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mut{color:var(--muted);font-weight:600}
+.layout{display:flex;min-height:100vh}
+
+/* Sidebar */
+.side{width:248px;flex:none;background:#fff;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:11px;padding:2px 8px 22px}
+.logo{width:38px;height:38px;border-radius:11px;background:var(--blue);display:grid;place-items:center;color:#fff;box-shadow:0 8px 18px rgba(0,105,249,.28);flex:none}
+.logo svg{width:auto;height:23px;display:block}
+.brand b{font-size:17px;font-weight:800;letter-spacing:-.3px;display:block}
+.brand small{display:block;color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.nav a{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:11px;color:var(--muted);font-weight:700;cursor:pointer;text-decoration:none;margin-bottom:3px;transition:.15s}
+.nav a:hover{background:var(--bg);color:var(--ink)}
+.nav a.on{background:var(--blue-50);color:var(--blue)}
+.side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+.me{display:flex;align-items:center;gap:10px;padding:6px 8px}
+.me b{font-size:13.5px;display:block}.me small{font-size:12px;color:var(--muted);font-weight:600}
+.me .x{margin-left:auto}
+.credit{font-size:11.5px;color:var(--muted);font-weight:600;padding:10px 8px 0}
+.credit a{color:var(--blue);text-decoration:none;font-weight:700}
+
+/* Main */
+.main{flex:1;min-width:0;padding:26px 30px 48px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.top h1{font-size:24px;font-weight:800;letter-spacing:-.5px}
+.top p{color:var(--muted);font-weight:600;margin-top:3px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mtop{display:none}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:11px;padding:10px 16px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff;transition:.15s;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--blue-d)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--bg)}
+.btn.sm{padding:7px 11px;font-size:13px;border-radius:9px}
+.btn.green{background:var(--green)}.btn.green:hover{background:#05603A}
+.btn.danger{background:#fff;color:var(--red);border:1px solid #FBD5D2}.btn.danger:hover{background:var(--red-50)}
+.btn:disabled{opacity:.6;cursor:default}
+.x{border:0;background:var(--bg);width:34px;height:34px;border-radius:10px;cursor:pointer;display:grid;place-items:center;color:var(--ink2);flex:none}
+.x:hover{background:var(--line)}
+.link{border:0;background:none;color:var(--blue);font-weight:700;cursor:pointer;padding:0}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px 12px}
+.card-h h3{font-size:15px;font-weight:800;letter-spacing:-.2px}
+.card-b{padding:0 18px 18px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.kpi{padding:16px 18px}
+.kpi .l{color:var(--muted);font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:9px}
+.kpi .v{font-size:25px;font-weight:800;letter-spacing:-.7px;margin-top:10px;white-space:nowrap}
+.kpi .v small{font-size:13px;color:var(--muted);font-weight:700;letter-spacing:0}
+.kpi .s{font-size:12px;color:var(--muted);font-weight:600;margin-top:4px}
+.ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
+.ic svg{width:16px;height:16px}
+.ic.b{background:var(--blue-50);color:var(--blue)}.ic.g{background:var(--green-50);color:var(--green)}.ic.r{background:var(--red-50);color:var(--red)}.ic.a{background:var(--amber-50);color:var(--amber)}.ic.v{background:#F1EDFF;color:var(--violet)}
+.up{color:var(--green)}.down{color:var(--red)}
+.grid2{display:grid;grid-template-columns:1.45fr 1fr;gap:14px;margin-bottom:14px}
+.grid2>*,.kpis>*{min-width:0}
+.alert{display:flex;gap:14px;align-items:center;padding:14px 18px;margin-bottom:14px;background:#FFF8F7;border-color:#FBD5D2}
+.alert.warn{background:#FFFAF2;border-color:#FEDF89}
+.alert b{font-weight:800}
+
+/* Table */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;text-align:left;color:var(--muted);font-weight:700;padding:10px 18px;border-bottom:1px solid var(--line);background:#FAFBFD;white-space:nowrap}
+td{padding:12px 18px;border-bottom:1px solid var(--line);font-weight:600;color:var(--ink2);white-space:nowrap}
+td b{color:var(--ink)}
+tr:last-child td{border-bottom:0}
+tr.click{cursor:pointer}tr.click:hover td{background:#F8FAFF}
+.r{text-align:right}
+.grid2 td{white-space:normal}.grid2 td.r,.grid2 td:first-child,.grid2 td.nw{white-space:nowrap}
+.empty{padding:34px 18px;text-align:center;color:var(--muted);font-weight:600}
+
+.tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.t-new{background:var(--blue-50);color:var(--blue-d)}.t-came{background:var(--amber-50);color:#B54708}.t-done{background:var(--green-50);color:#067647}.t-noshow{background:var(--red-50);color:#B42318}.t-cancel{background:#F2F4F7;color:#475467}
+.t-debt{background:var(--red-50);color:#B42318}.t-adv{background:var(--green-50);color:#067647}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.av{width:38px;height:38px;border-radius:12px;background:var(--blue-50);color:var(--blue);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.av.lg{width:54px;height:54px;border-radius:16px;font-size:18px}
+.who{display:flex;align-items:center;gap:11px}
+.who small{display:block;color:var(--muted);font-weight:600;font-size:12px;margin-top:1px}
+.tg{color:#229ED9;display:inline-flex}
+
+/* Forms */
+.in{width:100%;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff;outline:none;font-weight:600;transition:.15s;min-height:42px}
+.in:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,105,249,.14)}
+textarea.in{resize:vertical;min-height:70px}
+label.f,div.f{display:block;margin-bottom:14px}
+.f>span,.fl{display:block;font-size:12.5px;color:var(--muted);font-weight:700;margin-bottom:6px}
+.row{display:flex;gap:12px}.row>*{flex:1;min-width:0}
+.srch{position:relative;max-width:340px;flex:1}
+.srch svg{position:absolute;left:12px;top:12px;color:var(--muted);width:17px;height:17px}
+.srch .in{padding-left:38px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{position:relative}
+.pill input{position:absolute;opacity:0;pointer-events:none}
+.pill span{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;font-weight:700;cursor:pointer;transition:.15s;background:#fff}
+.pill input:checked+span{border-color:var(--blue);background:var(--blue-50);color:var(--blue)}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:11px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:7px 12px;border-radius:8px;font-weight:700;color:var(--muted);cursor:pointer}
+.seg button.on{background:var(--blue-50);color:var(--blue)}
+.svc-list{border:1px solid var(--line);border-radius:12px;max-height:210px;overflow:auto}
+.svc{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer;font-weight:600}
+.svc:last-child{border-bottom:0}
+.svc:hover{background:#F8FAFF}
+.svc input{width:17px;height:17px;accent-color:var(--blue)}
+.svc em{margin-left:auto;font-style:normal;color:var(--muted);font-weight:700}
+.pp{position:relative}
+.pp-list{border:1px solid var(--line);border-radius:12px;margin-top:6px;overflow:hidden}
+.pp-i{padding:10px 12px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;gap:10px;font-weight:600}
+.pp-i:last-child{border-bottom:0}
+.pp-i:hover{background:#F8FAFF}
+.pp-i small{color:var(--muted)}
+.pp-i.add{color:var(--blue);font-weight:800}
+.pp-sel{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--blue-100);background:var(--blue-50);border-radius:12px;padding:10px 12px}
+.pp-sel small{display:block;color:var(--muted);font-weight:600}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.switch:last-child{border-bottom:0}
+.switch b{display:block}.switch small{color:var(--muted);font-weight:600}
+.tgl{position:relative;width:44px;height:26px;flex:none}
+.tgl input{opacity:0;width:0;height:0}
+.tgl i{position:absolute;inset:0;background:#D0D5DD;border-radius:99px;cursor:pointer;transition:.2s}
+.tgl i:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl input:checked+i{background:var(--blue)}
+.tgl input:checked+i:before{transform:translateX(18px)}
+.colors{display:flex;gap:8px;flex-wrap:wrap}
+.colors label input{display:none}
+.colors label i{display:block;width:30px;height:30px;border-radius:9px;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.colors label input:checked+i{box-shadow:0 0 0 2px var(--ink)}
+
+/* Modal */
+.ov{position:fixed;inset:0;background:rgba(14,26,51,.42);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;animation:fd .15s}
+.md{background:#fff;border-radius:20px;width:100%;max-width:540px;max-height:92vh;overflow:auto;box-shadow:0 24px 60px rgba(14,26,51,.25);animation:pop .18s}
+.md.wide{max-width:800px}
+.md.sm{max-width:400px}
+.md-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:3}
+.md-h h3{font-size:17px;font-weight:800;letter-spacing:-.2px}
+.md-b{padding:20px 22px}
+.md-f{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;align-items:center;position:sticky;bottom:0;background:#fff;flex-wrap:wrap}
+@keyframes fd{from{opacity:0}}
+@keyframes pop{from{transform:translateY(8px) scale(.98);opacity:0}}
+#toast{position:fixed;bottom:28px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-weight:700;opacity:0;transition:.25s;z-index:99;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.2);max-width:90vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.info div{background:var(--bg);border-radius:12px;padding:11px 13px}
+.info small{display:block;color:var(--muted);font-weight:700;font-size:11.5px;margin-bottom:3px}
+.info b{font-weight:800;font-size:14.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--bg);border-radius:8px;padding:5px 10px;font-weight:700;font-size:12.5px;color:var(--ink2)}
+.st-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.st-row button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 6px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink2);transition:.15s}
+.st-row button:hover{border-color:var(--blue-100);background:#F8FAFF}
+.st-row button.on{border-color:var(--blue);background:var(--blue-50);color:var(--blue)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:0 -22px 16px;padding:0 22px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:11px 12px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button.on{color:var(--blue);border-color:var(--blue)}
+.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 18px}
+.fin div{border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.fin small{display:block;color:var(--muted);font-weight:700;font-size:11.5px}
+.fin b{font-size:16px;font-weight:800}
+.hist{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer}
+.hist:hover{border-color:var(--blue-100);background:#FAFCFF}
+.hist-t{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hist p{color:var(--ink2);font-weight:600;margin-top:6px;font-size:13px}
+
+/* Chart */
+.bars{display:flex;align-items:flex-end;gap:6px;height:170px;padding:6px 4px 0}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;min-width:0}
+.bar i{display:block;width:100%;max-width:30px;border-radius:7px 7px 3px 3px;background:var(--blue-100);min-height:3px;transition:.3s}
+.bar.today i{background:var(--blue)}
+.bar:hover i{background:var(--blue)}
+.bar span{font-size:11px;color:var(--muted);font-weight:700}
+.hb{margin-bottom:13px}
+.hb-t{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px;gap:8px}
+.hb-t span{color:var(--muted)}
+.hb-l{height:8px;background:var(--bg);border-radius:99px;overflow:hidden}
+.hb-l i{display:block;height:100%;border-radius:99px}
+
+/* Calendar */
+.cal-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.cal-bar h2{font-size:16px;font-weight:800;margin:0 6px}
+.cal{overflow:auto;max-height:calc(100vh - 220px);position:relative}
+.cal-in{display:grid;min-width:max-content}
+.cal-hd{position:sticky;top:0;z-index:4;background:#fff;border-bottom:1px solid var(--line);border-left:1px solid var(--line);padding:12px 14px;font-weight:800;display:flex;align-items:center;gap:8px}
+.cal-hd small{display:block;color:var(--muted);font-weight:600;font-size:11.5px}
+.cal-hd.c0{left:0;z-index:6;border-left:0}
+.cal-times{position:sticky;left:0;z-index:3;background:#fff}
+.cal-times div{position:absolute;left:0;right:0;text-align:right;padding-right:10px;font-size:11.5px;font-weight:700;color:var(--muted);transform:translateY(-7px)}
+.cal-times div:first-child{transform:translateY(3px)}
+.cal-col{position:relative;border-left:1px solid var(--line);cursor:copy;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--h) - 1px),#EEF1F6 calc(var(--h) - 1px),#EEF1F6 var(--h))}
+.cal-col.off{background-color:#FAFBFD}
+.ap{position:absolute;left:5px;right:5px;border-radius:10px;padding:6px 9px;cursor:pointer;overflow:hidden;border:1px solid var(--line);border-left:4px solid var(--c);background:#fff;box-shadow:0 2px 6px rgba(16,24,40,.06);transition:.12s;font-size:12.5px}
+.ap:hover{box-shadow:0 6px 16px rgba(16,24,40,.12);z-index:2}
+.ap b{display:block;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap small{display:block;color:var(--muted);font-weight:700;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap.came{background:#FFFBF2}.ap.done{background:#F2FBF6;border-color:#CDEFDD;border-left-color:var(--c)}.ap.noshow{background:#FFF6F5;opacity:.7}.ap.noshow b{text-decoration:line-through}
+.now{position:absolute;left:0;right:0;height:2px;background:var(--red);z-index:1;pointer-events:none}
+.now:before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--red)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-weight:700;font-size:12px}
+.legend span{display:flex;align-items:center;gap:6px}
+
+/* Teeth */
+.teeth{background:var(--bg);border-radius:14px;padding:16px 10px;overflow-x:auto}
+.jaw{display:flex;justify-content:center;gap:3px;min-width:max-content}
+.jaw+.jaw{margin-top:12px;padding-top:12px;border-top:1px dashed #CBD3E1}
+.jaw .mid{width:10px}
+.tooth{display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;cursor:pointer;padding:3px 1px;border-radius:8px}
+.tooth:hover{background:#fff}
+.tooth.sel{background:#fff;box-shadow:0 0 0 2px var(--blue)}
+.tooth svg{width:28px;height:32px}
+.tooth span{font-size:11px;font-weight:800;color:var(--muted)}
+.tlegend{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tlegend button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 10px;font-weight:700;font-size:12.5px;cursor:pointer}
+.tlegend button i{width:13px;height:13px;border-radius:4px;border:1px solid rgba(0,0,0,.15)}
+.tlegend button.on{border-color:var(--blue);background:var(--blue-50)}
+
+/* Login */
+.login{min-height:100vh;display:grid;grid-template-columns:1.05fr 1fr}
+.lg-art{background:var(--blue);color:#fff;padding:48px 56px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.lg-art:after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;border:70px solid rgba(255,255,255,.06);right:-180px;bottom:-200px}
+.lg-art .brand b{color:#fff}.lg-art .brand small{color:rgba(255,255,255,.7)}
+.lg-art .logo{background:#fff;box-shadow:none}
+.lg-art h2{font-size:40px;line-height:1.12;font-weight:800;letter-spacing:-1.2px;margin-top:auto;max-width:480px}
+.lg-art p{color:rgba(255,255,255,.8);font-weight:600;font-size:15.5px;margin-top:14px;max-width:440px;line-height:1.55}
+.lg-stats{display:flex;gap:12px;margin-top:34px;flex-wrap:wrap;position:relative;z-index:1}
+.lg-stats div{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:12px 16px;backdrop-filter:blur(6px)}
+.lg-stats b{font-size:20px;font-weight:800;display:block}
+.lg-stats small{color:rgba(255,255,255,.75);font-weight:600;font-size:12px}
+.lg-form{display:flex;align-items:center;justify-content:center;padding:32px 20px;background:#fff}
+.lg-box{width:100%;max-width:370px}
+.lg-box h1{font-size:27px;font-weight:800;letter-spacing:-.6px}
+.lg-box>p{color:var(--muted);font-weight:600;margin:6px 0 26px}
+.lg-err{color:var(--red);font-weight:700;min-height:20px;margin:-4px 0 10px}
+.demo{margin-top:22px;border:1px dashed var(--blue-100);background:#F8FAFF;border-radius:14px;padding:14px}
+.demo b{display:block;font-size:13px;margin-bottom:8px}
+.demo button{display:flex;justify-content:space-between;width:100%;border:0;background:#fff;border-radius:9px;padding:8px 11px;margin-top:6px;cursor:pointer;font-weight:700;box-shadow:0 0 0 1px var(--line)}
+.demo button:hover{box-shadow:0 0 0 1px var(--blue)}
+.demo button span{color:var(--muted);font-weight:600}
+.lock{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lock .card{max-width:440px;padding:34px;text-align:center}
+.lock .ic{width:60px;height:60px;border-radius:18px;margin:0 auto 16px}
+.lock .ic svg{width:28px;height:28px}
+.banner{display:flex;align-items:center;gap:10px;background:var(--amber-50);border:1px solid #FEDF89;color:#93370D;border-radius:12px;padding:11px 14px;font-weight:700;margin-bottom:16px}
+.loading{min-height:100vh;display:grid;place-items:center}
+.spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--blue-100);border-top-color:var(--blue);animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.mod-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.mod-row:last-child{border-bottom:0}
+.mod-row .ic{width:38px;height:38px;border-radius:11px}
+.mod-row b{display:block}.mod-row small{color:var(--muted);font-weight:600}
+.mod-row .sp{flex:1}
+.plan{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px;border-radius:var(--r);background:var(--blue-50);border:1px solid var(--blue-100);margin-bottom:14px}
+.plan b{font-size:18px;font-weight:800}
+.more-list a{align-items:center;gap:12px;padding:13px 6px;border-bottom:1px solid var(--line);font-weight:700;cursor:pointer;text-decoration:none}
+.qty{font-weight:800;color:var(--ink)}
+.t-low{background:var(--amber-50);color:var(--amber)}
+/* Bottom nav (mobile) */
+.bnav{display:none}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .side{display:none}
+  .main{padding:0 14px 96px}
+  .mtop{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20;background:rgba(243,246,251,.92);backdrop-filter:blur(10px);padding:12px 0;margin-bottom:4px}
+  .mtop .brand{padding:0}
+  .mtop .sp{flex:1}
+  .top h1{font-size:21px}
+  .top .acts .btn span.hide-m{display:none}
+  .bnav{display:flex;position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:30;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted);padding:6px 0;text-decoration:none;cursor:pointer;border-radius:10px}
+  .bnav a svg{width:21px;height:21px}
+  .bnav a.on{color:var(--blue)}
+  .kpi{padding:14px}.kpi .v{font-size:20px}
+  .login{grid-template-columns:1fr}
+  .lg-art{padding:28px 22px 30px}
+  .lg-art h2{font-size:27px;margin-top:34px}
+  .lg-stats{margin-top:22px}
+  .lg-stats div{padding:9px 12px}.lg-stats b{font-size:16px}
+  .md{max-height:94vh;border-radius:18px}
+  .ov{align-items:flex-end;padding:8px}
+  .info{grid-template-columns:repeat(2,1fr)}
+  .fin{gap:6px}.fin div{padding:9px 10px}.fin b{font-size:13px}
+  td{white-space:normal}td.r{white-space:nowrap}
+  .hide-m-col{display:none}
+  .jaw{gap:1px}.jaw .mid{width:6px}.tooth{padding:2px 0}.tooth svg{width:19px;height:23px}.tooth span{font-size:9.5px}
+  .teeth{padding:12px 4px}
+  .st-row{grid-template-columns:repeat(2,1fr)}
+  .row{flex-wrap:wrap}.row>*{flex:1 1 140px}
+  .cal{max-height:calc(100vh - 250px)}
+  .cal-bar input[type=date]{display:none}
+  .hide-m{display:none}
+  .more-list a{display:flex}
+  td,th{padding:11px 12px}
+  .srch{max-width:none}
+}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading"><div class="spin"></div></div></div>
+<div id="modal-root"></div>
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   Aspira — klinika boshqaruv tizimi (v1.1)
+   Ishlab chiqdi: Vector Studio — vectorstudiya.uz
+   ============================================================ */
+
+// ---------- SOZLAMALAR (faqat shu yerni o'zgartirasiz) ----------
+const APP_NAME   = 'Aspira';
+const OWNER_PHONE = '+998 90 832 44 36';           // obuna tugaganda ko'rinadigan raqamingiz
+const CRM_BOT = 'aspira_crm_bot';                   // Aspira asosiy boti: ro'yxat, to'lov, klinika botini yaratish
+const CLINICS = {
+  // Har bir klinika uchun bitta qator: 'kalit': 'Apps Script /exec manzili'
+  // Klinikaga havola beriladi: sayt.uz/?k=kalit
+  // 'nur-dental': 'https://script.google.com/macros/s/XXXXXXXX/exec',
+};
+// -----------------------------------------------------------------
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = p => (p||'') + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today = () => ymd(new Date());
+const nowHM = () => { const d=new Date(); return pad(d.getHours())+':'+pad(d.getMinutes()); };
+const addDays = (s,n) => { const d=new Date(s+'T00:00'); d.setDate(d.getDate()+n); return ymd(d); };
+const num = n => String(Math.round(Number(n)||0)).replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+const money = n => num(n)+" so'm";
+const short = n => { n=Number(n)||0; if(n>=1e9) return (n/1e9).toFixed(1).replace('.0','')+' mlrd'; if(n>=1e6) return (n/1e6).toFixed(1).replace('.0','')+' mln'; if(n>=1e3) return Math.round(n/1e3)+' ming'; return String(n); };
+const sum = (arr,f) => arr.reduce((s,x)=>s+(Number(typeof f==='function'?f(x):(f?x[f]:x))||0),0);
+const toMin = t => { const [h,m]=String(t||'0:0').split(':').map(Number); return h*60+(m||0); };
+const fromMin = m => pad(Math.floor(m/60))+':'+pad(m%60);
+const MONTHS = ['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'];
+const WD = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+const dateLong = s => { const d=new Date(s+'T00:00'); return d.getDate()+'-'+MONTHS[d.getMonth()]+', '+WD[d.getDay()]; };
+const dateShort = s => s ? s.slice(8,10)+'.'+s.slice(5,7)+'.'+s.slice(0,4) : '—';
+const monthName = m => { const [y,mm]=m.split('-'); return MONTHS[+mm-1][0].toUpperCase()+MONTHS[+mm-1].slice(1)+' '+y; };
+const initials = n => String(n||'?').replace(/^Dr\.?\s*/i,'').split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+const digits = s => String(s||'').replace(/\D/g,'');
+
+const LS = {
+  get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
+const STATUS = {new:'Kutilmoqda',came:'Keldi',done:'Yakunlandi',noshow:'Kelmadi',cancel:'Bekor qilindi'};
+const METHODS = {naqd:'Naqd',karta:'Karta',click:'Click',payme:'Payme'};
+const ROLES = {admin:'Administrator',owner:'Rahbar',doctor:'Shifokor'};
+const COLORS = ['#1F5EFF','#7A5AF8','#12B76A','#F79009','#EE46BC','#06AED4','#F04438','#475467'];
+
+const ICON = {
+  box:'<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>',
+  more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  cal:'<rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c1.8.8 3 2.6 3.5 5.2"/>',
+  wallet:'<rect x="2.5" y="5.5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19M16.5 14.5h2"/>',
+  chart:'<path d="M4 20V11M10 20V5M16 20v-6M2 20h20"/>',
+  gear:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  logout:'<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 16l-4-4 4-4M6 12h10"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  left:'<path d="m15 18-6-6 6-6"/>', right:'<path d="m9 18 6-6-6-6"/>',
+  phone:'<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
+  cross:'<path d="M12 4v16M4 12h16"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  check:'<path d="m5 12.5 4.5 4.5L19 7"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  alert:'<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 17.6A2 2 0 0 0 4.1 20.6h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  lock:'<rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>',
+  tg:'<path d="m21.5 4.5-3.2 15.1c-.2 1-.9 1.3-1.7.8l-4.8-3.6-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2L5.1 13.3.4 11.8c-1-.3-1-1 .2-1.5L20.2 3c.9-.3 1.6.2 1.3 1.5z"/>',
+  trend:'<path d="m3 17 6-6 4 4 8-8M15 7h6v6"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+  tooth:'<path d="M7 3C4.5 3 3 5 3 7.5c0 3 1.5 4.5 2 7.5.4 2.5 1 6 2.5 6s1.8-3 2.5-5c.3-1 .7-1.5 2-1.5s1.7.5 2 1.5c.7 2 1 5 2.5 5s2.1-3.5 2.5-6c.5-3 2-4.5 2-7.5C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/>',
+  down:'<path d="M12 4v12M6 11l6 6 6-6M4 20h16"/>',
+};
+const ic = (n,cls='') => `<svg class="i ${cls}" viewBox="0 0 24 24">${ICON[n]||''}</svg>`;
+const MARK_D = 'M79.42 73.25 L73.58 76.00 L68.08 79.67 L63.67 83.92 L60.17 88.67 L58.17 92.58 L56.17 99.42 L55.58 103.17 L55.67 110.58 L57.00 117.58 L59.17 124.00 L61.33 128.50 L65.83 135.75 L69.50 140.58 L73.92 145.50 L81.67 153.25 L89.17 159.50 L90.42 159.67 L92.17 158.83 L106.50 149.25 L117.83 140.17 L123.17 135.08 L123.75 133.50 L123.08 132.42 L115.17 126.92 L113.58 126.25 L111.33 126.17 L109.17 126.92 L102.08 131.83 L94.67 136.25 L93.25 136.50 L91.83 135.75 L85.50 128.75 L80.75 122.50 L78.33 118.00 L76.75 113.42 L76.17 109.58 L76.75 103.42 L79.08 98.50 L82.58 94.75 L88.08 91.83 L91.42 91.25 L95.00 91.25 L97.67 91.58 L101.25 92.67 L110.17 96.75 L116.00 97.08 L119.75 96.17 L128.33 92.25 L132.92 91.33 L137.25 91.33 L141.75 92.42 L145.50 94.67 L147.67 96.58 L149.42 98.83 L151.17 102.33 L152.00 105.83 L152.08 109.58 L150.58 116.50 L147.75 122.25 L141.50 130.58 L131.75 140.75 L121.17 149.92 L108.00 159.58 L99.58 164.92 L98.67 166.00 L98.67 166.92 L99.42 167.92 L106.92 173.33 L113.17 177.17 L115.33 177.08 L119.75 174.50 L127.75 168.92 L138.08 160.83 L150.17 149.83 L157.92 141.58 L161.75 136.83 L165.58 131.00 L168.75 124.92 L171.67 116.67 L172.75 110.25 L172.75 103.50 L172.33 99.67 L170.92 94.50 L169.67 91.25 L166.92 86.75 L164.33 83.42 L160.75 80.00 L154.83 75.92 L149.17 73.25 L145.42 72.17 L139.75 71.33 L133.75 71.50 L125.92 73.17 L119.25 75.67 L114.25 76.33 L109.58 75.83 L101.67 73.00 L93.17 71.42 L84.92 71.83ZM112.17 38.50 L109.83 39.00 L106.33 40.42 L104.08 42.00 L101.58 44.58 L99.42 48.25 L98.67 50.50 L98.25 53.17 L98.42 57.17 L100.58 62.83 L102.25 65.00 L105.50 67.83 L108.42 69.33 L111.08 70.08 L116.17 70.25 L121.50 68.67 L125.17 66.08 L127.08 63.92 L129.58 58.75 L130.17 55.17 L130.08 52.83 L129.50 49.75 L128.42 47.00 L126.08 43.67 L121.92 40.33 L119.00 39.08 L116.50 38.50Z';
+const logoMark = (fill='#fff') => `<svg viewBox="54.6 37.4 119.2 140.9" xmlns="http://www.w3.org/2000/svg"><path fill="${fill}" fill-rule="evenodd" d="${MARK_D}"/></svg>`;
+
+// ---------- Klinika / server ----------
+let clinicKey = new URLSearchParams(location.search).get('k');
+if (clinicKey && CLINICS[clinicKey]) LS.set('mv_clinic', clinicKey); else clinicKey = LS.get('mv_clinic', null);
+const API = (clinicKey && CLINICS[clinicKey]) || null;
+const DEMO = !API;
+
+const S = {
+  user:null, token:null, page:null, sub:null, lic:null, cursor:0,
+  calDate:today(), calDoc:'all', patQ:'', pTab:'hist', selTooth:null,
+  cashFrom:today(), cashTo:today(), repM:today().slice(0,7), setTab:'clinic',
+  D:emptyD()
+};
+function emptyD(){ return {settings:{}, users:[], doctors:[], services:[], patients:[], appointments:[], payments:[], stock:[], stockmoves:[]}; }
+const byId = (c,id) => (S.D[c]||[]).find(x=>x.id===id);
+const isDoc = () => S.user && S.user.role==='doctor';
+const canManage = () => S.user && (S.user.role==='admin' || S.user.role==='owner');
+const CK = () => 'mv_cache_'+(clinicKey||'demo');
+const visAppts = () => isDoc() ? S.D.appointments.filter(a=>a.doctorId===S.user.doctorId) : S.D.appointments;
+const visDocs = () => { const d=S.D.doctors.filter(x=>!x.archived); return isDoc()? d.filter(x=>x.id===S.user.doctorId) : d; };
+// Modullar: Vector Studio admin panelidan har bir klinikaga yoqiladi (lic), klinika o'zi ham dental/telegram'ni o'chira oladi
+const MODS = {kassa:{t:"Kassa va to'lovlar",d:"Naqd, karta, Click, Payme · qarzdorlar ro'yxati",i:'wallet'},reports:{t:'Hisobotlar',d:"Oylik tushum, xizmatlar, kelmay qolish foizi, Excel",i:'chart'},salary:{t:'Shifokor maoshi',d:'Ishlagan summadan foiz — avtomatik hisoblanadi',i:'user'},dental:{t:'Tish formulasi',d:'Bemor kartasida 32 ta tish sxemasi',i:'tooth'},telegram:{t:'Telegram eslatmalar',d:'Qabuldan 1 kun va 2 soat oldin bemorga xabar',i:'tg'},stock:{t:'Ombor',d:"Materiallar qoldig'i, kirim-chiqim, kam qolganda ogohlantirish",i:'box'}};
+const M = k => DEMO ? true : !!(S.lic && S.lic.modules && S.lic.modules[k]);
+const dental = () => M('dental') && (S.D.settings.modules||{}).dental!==false;
+
+async function call(action, payload={}) {
+  const res = await fetch(API, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action, token:S.token, ...payload})});
+  const j = await res.json();
+  if (!j.ok) { const e = new Error(j.msg || j.error || 'Xatolik'); e.code = j.error || 'SERVER'; e.data = j; throw e; }
+  return j;
+}
+function handleErr(e) {
+  if (e.code === 'AUTH') { toast('Sessiya tugadi, qaytadan kiring'); logout(true); return; }
+  if (e.code === 'SUB') { S.sub = {...(S.sub||{}), expired:true}; closeModal(); render(); return; }
+  if (e.code === 'PASS') { S.user = {...S.user, mustChange:true}; forcePass(); return; }
+  toast(e.message || 'Xatolik yuz berdi');
+}
+// Server rad etsa: xabarni ko'rsatamiz va ma'lumotni serverdagi holatga qaytaramiz
+function rejected(e){
+  if (['AUTH','SUB','PASS'].includes(e.code)) return handleErr(e);
+  setTimeout(()=>toast(e.message||'Saqlanmadi'), 400);
+  DB.load(true).then(()=>{ if(!$('#modal-root').innerHTML) render(); }).catch(()=>{});
+}
+function applyData(r){
+  if (r.full) S.D = {...emptyD(), ...r.data};
+  else Object.keys(r.data||{}).forEach(c=>{
+    const list=r.data[c]; if(!list||!list.length) return;
+    if (c==='settings') { const x=list[list.length-1]; if(!x._del) S.D.settings=x; return; }
+    const arr=S.D[c]||(S.D[c]=[]);
+    list.forEach(x=>{ const i=arr.findIndex(y=>y.id===x.id); if(x._del){ if(i>=0) arr.splice(i,1); } else if(i>=0) arr[i]=x; else arr.push(x); });
+  });
+  S.cursor=r.cursor||S.cursor; S.sub=r.sub||S.sub; S.lic=r.lic||S.lic; if (r.user) S.user=r.user;
+  LS.set('mv_sess', {token:S.token, user:S.user});
+  LS.set(CK(), {D:S.D, cursor:S.cursor, sub:S.sub, lic:S.lic, uid:S.user&&S.user.id});
+}
+
+const DB = {
+  async login(l, p) {
+    if (DEMO) {
+      let d = LS.get('mv_demo', null); if (!d) { d = seedDemo(); LS.set('mv_demo', d); }
+      const u = d.users.find(x => x.login === l.trim().toLowerCase() && x.pass === p);
+      if (!u) throw new Error("Login yoki parol noto'g'ri");
+      const {pass, ...user} = u; return {token:'demo', user};
+    }
+    return await call('login', {login:l.trim().toLowerCase(), pass:p});
+  },
+  async load(full) {
+    if (DEMO) { let d = LS.get('mv_demo', null); if (!d) { d = seedDemo(); LS.set('mv_demo', d); } S.D = {...emptyD(), ...d}; return; }
+    // birinchi marta — hammasi; keyin faqat o'zgarganlari (tez va internetni tejaydi)
+    const r = await call('load', (!full && S.cursor) ? {since:S.cursor} : {});
+    applyData(r);
+  },
+  async save(coll, item) {
+    const local = {...item}; delete local.newPass;
+    if (coll === 'settings') S.D.settings = local;
+    else { const arr = S.D[coll]; const i = arr.findIndex(x=>x.id===item.id); if (i>=0) arr[i]=local; else arr.push(local); }
+    if (DEMO) { if (coll==='users' && item.newPass) { const u=S.D.users.find(x=>x.id===item.id); u.pass=item.newPass; } LS.set('mv_demo', S.D); return; }
+    try { const r = await call('save', {coll, item}); if (r._u) { local._u = r._u; if (coll==='settings') S.D.settings._u=r._u; LS.set(CK(), {D:S.D, cursor:S.cursor, sub:S.sub, lic:S.lic, uid:S.user&&S.user.id}); } }
+    catch (e) { if (e.code) rejected(e); else { queue({a:'save', p:{coll,item}}); toast("Internet yo'q — keyin avtomatik saqlanadi"); } }
+  },
+  async del(coll, id) {
+    S.D[coll] = S.D[coll].filter(x=>x.id!==id);
+    if (DEMO) { LS.set('mv_demo', S.D); return; }
+    try { await call('del', {coll, id}); }
+    catch (e) { if (e.code) rejected(e); else queue({a:'del', p:{coll,id}}); }
+  }
+};
+function queue(op){ const q=LS.get('mv_q',[]); q.push(op); LS.set('mv_q',q); }
+async function flushQ(){
+  const q = LS.get('mv_q',[]); if (!q.length) return true;
+  const rest = [];
+  for (const op of q) { try { await call(op.a, op.p); } catch(e){ if (e.code==='CONFLICT') toast("Internetsiz kiritilgan o'zgarish boshqa xodimnikidan eski — serverdagisi qoldi"); else if (e.code) handleErr(e); else rest.push(op); } }
+  LS.set('mv_q', rest); return !rest.length;
+}
+async function sync(){
+  if (DEMO || !S.user || document.hidden) return;
+  if ($('#modal-root').innerHTML) return;           // forma ochiq bo'lsa, xalaqit bermaymiz
+  try { if (await flushQ()) { await DB.load(); if (!$('#modal-root').innerHTML && !document.activeElement.matches('input,textarea,select')) render(); } }
+  catch(e){ if (e.code) handleErr(e); }
+}
+
+// ---------- Demo ma'lumotlar ----------
+function seedDemo(){
+  let seed = 11; const rnd = () => (seed = seed*16807 % 2147483647, (seed-1)/2147483646);
+  const pick = a => a[Math.floor(rnd()*a.length)];
+  const t = today();
+  const doctors = [
+    {id:'d1', name:'Dr. Aziz Karimov', spec:'Terapevt-stomatolog', phone:'+998 90 111 22 33', percent:30, color:'#1F5EFF'},
+    {id:'d2', name:'Dr. Malika Yusupova', spec:'Ortodont', phone:'+998 91 222 33 44', percent:35, color:'#7A5AF8'},
+    {id:'d3', name:'Dr. Sardor Rahimov', spec:'Xirurg-implantolog', phone:'+998 93 333 44 55', percent:30, color:'#12B76A'},
+  ];
+  const services = [
+    {id:'s1', name:'Konsultatsiya', price:50000}, {id:'s2', name:'Professional tish tozalash', price:250000},
+    {id:'s3', name:'Karies davolash (plomba)', price:350000}, {id:'s4', name:'Kanal davolash', price:600000},
+    {id:'s5', name:'Tish olish', price:200000}, {id:'s6', name:'Tish oqartirish', price:900000},
+    {id:'s7', name:'Breket tekshiruvi', price:150000}, {id:'s8', name:'Rentgen snimok', price:40000},
+    {id:'s9', name:'Implant o\'rnatish', price:4500000}, {id:'s10', name:'Koronka (metallokeramika)', price:1200000},
+  ];
+  const docSvc = {d1:['s1','s2','s3','s4','s8','s6'], d2:['s1','s7','s7','s8'], d3:['s1','s5','s8','s9','s10']};
+  const names = ['Dilnoza Rahimova','Jasur Toshmatov','Madina Karimova','Bekzod Aliyev','Nigora Usmonova','Sherzod Qodirov','Gulnora Ismoilova','Otabek Nazarov','Zarina Mirzayeva',"Ulug'bek Saidov",'Kamola Ergasheva','Akmal Xolmatov','Feruza Abdullayeva',"Rustam Yo'ldoshev",'Shahzoda Komilova','Doniyor Murodov','Sevara Hamidova','Ibrohim Sobirov'];
+  const pre = ['90','91','93','94','95','97','99','88','33'];
+  const patients = names.map((n,i)=>({id:'p'+(i+1), name:n, phone:`+998 ${pick(pre)} ${100+Math.floor(rnd()*899)} ${pad(10+Math.floor(rnd()*89))} ${pad(10+Math.floor(rnd()*89))}`,
+    birth: (1965+Math.floor(rnd()*45))+'-'+pad(1+Math.floor(rnd()*12))+'-'+pad(1+Math.floor(rnd()*28)), gender: /a$/.test(n.split(' ')[1]||'')?'ayol':'erkak',
+    createdAt: addDays(t, -Math.floor(rnd()*60)), teeth:{}, note:'', tgChatId: rnd()>.55 ? 1 : null}));
+  patients[0].teeth = {16:'filled',26:'caries',36:'rct',46:'crown',18:'missing',11:'healthy'};
+  patients[3].teeth = {14:'caries',24:'treat',37:'implant',47:'missing'};
+  const appointments = [], payments = [];
+  const slots = []; for (let m=9*60; m<=17*60; m+=30) slots.push(m);
+  const nm = toMin(nowHM());
+  for (let off=-34; off<=4; off++) {
+    const day = addDays(t, off); if (new Date(day+'T00:00').getDay()===0) continue;
+    doctors.forEach(doc => {
+      const cnt = 2 + Math.floor(rnd()*(off===0?4:3)); const used = new Set();
+      for (let k=0;k<cnt;k++){
+        let s = pick(slots); if (used.has(s)) continue; used.add(s); used.add(s+30);
+        const p = pick(patients); const svcIds = [pick(docSvc[doc.id])]; if (rnd()>.7) svcIds.push('s8');
+        const uniq=[...new Set(svcIds)]; const total = sum(uniq.map(id=>services.find(x=>x.id===id)),'price');
+        let status='new'; const past = off<0 || (off===0 && s+30<nm);
+        if (past) { const r=rnd(); status = r<.82?'done':r<.94?'noshow':'cancel'; }
+        else if (off===0 && s<=nm) status='came';
+        const a = {id:'a'+appointments.length, patientId:p.id, doctorId:doc.id, date:day, time:fromMin(s), dur: uniq.includes('s9')?60:30, services:uniq, total, status, note:'', diag: status==='done'?'Davolash bajarildi, tavsiyalar berildi.':''};
+        appointments.push(a);
+        if (status==='done') { const r=rnd(); const amt = r<.84 ? total : Math.round(total*.5/1000)*1000;
+          payments.push({id:'y'+payments.length, patientId:p.id, appointmentId:a.id, amount:amt, method:pick(['naqd','naqd','karta','click','payme']), date:day, time:fromMin(s+35), by:'Administrator'}); }
+      }
+    });
+  }
+  const stock = [
+    {id:'m1', name:'Plomba materiali (Filtek Z250)', unit:'dona', qty:6, min:5, price:180000},
+    {id:'m2', name:'Anestetik (Ubistezin)', unit:'ampula', qty:24, min:20, price:9000},
+    {id:'m3', name:"Bir martalik qo'lqop", unit:'quti', qty:3, min:5, price:65000},
+    {id:'m4', name:'Tibbiy niqob', unit:'quti', qty:8, min:4, price:30000},
+    {id:'m5', name:'Implant (Osstem)', unit:'dona', qty:4, min:3, price:1600000},
+    {id:'m6', name:'Rentgen plyonka', unit:'dona', qty:40, min:50, price:6000},
+  ];
+  const stockmoves = [{id:'sm1', itemId:'m3', type:'out', qty:2, note:'Kunlik', date:addDays(t,-1), time:'09:10', by:'Administrator'},{id:'sm2', itemId:'m2', type:'in', qty:20, note:'Yetkazib beruvchidan', date:addDays(t,-3), time:'15:40', by:'Administrator'}];
+  return {
+    stock, stockmoves,
+    settings:{id:'main', name:'Nur Dental (demo)', phone:'+998 73 244 55 66', address:"Marg'ilon sh., Mustaqillik ko'chasi 12", workStart:'08:00', workEnd:'20:00', modules:{dental:true, telegram:true}},
+    users:[{id:'u1',name:'Administrator',login:'admin',pass:'admin123',role:'admin'},{id:'u2',name:'Dr. Aziz Karimov',login:'shifokor',pass:'1234',role:'doctor',doctorId:'d1'},{id:'u3',name:'Klinika rahbari',login:'rahbar',pass:'1234',role:'owner'}],
+    doctors, services, patients, appointments, payments
+  };
+}
+
+// ---------- Hisob-kitob ----------
+function patientFin(pid){
+  const charged = sum(S.D.appointments.filter(a=>a.patientId===pid && a.status==='done'),'total');
+  const paid = sum(S.D.payments.filter(p=>p.patientId===pid),'amount');
+  return {charged, paid, debt:Math.max(0,charged-paid), adv:Math.max(0,paid-charged)};
+}
+function apptPaid(id){ return sum(S.D.payments.filter(p=>p.appointmentId===id),'amount'); }
+function lastVisit(pid){ const a=S.D.appointments.filter(x=>x.patientId===pid && x.status==='done').map(x=>x.date).sort(); return a[a.length-1]||null; }
+const statusTag = s => `<span class="tag t-${s}">${STATUS[s]||s}</span>`;
+const dName = id => (byId('doctors',id)||{}).name||'—';
+const dColor = id => (byId('doctors',id)||{}).color||'#98A2B3';
+const pName = id => (byId('patients',id)||{}).name||'—';
+const svcNames = a => (a.services||[]).map(id=>(byId('services',id)||{}).name).filter(Boolean).join(', ');
+
+// ---------- UI yordamchilar ----------
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),2400); }
+function openModal(html, cls=''){ $('#modal-root').innerHTML = `<div class="ov" onmousedown="if(event.target===this)closeModal()"><div class="md ${cls}">${html}</div></div>`; }
+function closeModal(){ if (!DEMO && S.user && S.user.mustChange && $('#fp-1')) return; $('#modal-root').innerHTML=''; }
+const mHead = t => `<div class="md-h"><h3>${t}</h3><button class="x" onclick="closeModal()">${ic('x')}</button></div>`;
+let _yes = null;
+function ask(text, fn, btn="O'chirish"){ _yes = fn; openModal(mHead('Tasdiqlang')+`<div class="md-b"><p style="font-weight:600;line-height:1.55">${text}</p></div><div class="md-f"><button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn" style="background:var(--red)" onclick="closeModal();_yes&&_yes()">${btn}</button></div>`,'sm'); }
+function go(p){ S.page=p; closeModal(); render(); window.scrollTo(0,0); }
+
+// ---------- Asosiy render ----------
+function navItems(){
+  const all=[{id:'dash',t:'Bosh sahifa',m:'Asosiy',i:'home'},{id:'cal',t:'Qabullar',m:'Qabullar',i:'cal'},{id:'pat',t:'Bemorlar',m:'Bemorlar',i:'users'},
+    ...(M('kassa')?[{id:'cash',t:'Kassa',m:'Kassa',i:'wallet'}]:[]),...(M('stock')?[{id:'stock',t:'Ombor',m:'Ombor',i:'box'}]:[]),
+    ...(M('reports')?[{id:'rep',t:'Hisobotlar',m:'Hisobot',i:'chart'}]:[]),{id:'set',t:'Sozlamalar',m:'Sozlama',i:'gear'}];
+  return isDoc() ? all.filter(n=>['cal','pat'].includes(n.id)) : all;
+}
+const PAGES = {dash:pageDash, cal:pageCal, pat:pagePat, cash:pageCash, rep:pageRep, set:pageSet, stock:pageStock};
+function render(){
+  const app=$('#app');
+  if (!S.user) { app.innerHTML = viewLogin(); return; }
+  if (S.sub && S.sub.expired) { app.innerHTML = viewLock(); return; }
+  const nav = navItems();
+  if (!S.page || !nav.find(n=>n.id===S.page)) S.page = nav[0].id;
+  const st = S.D.settings;
+  const sideNav = nav.map(n=>`<a class="${S.page===n.id?'on':''}" onclick="go('${n.id}')">${ic(n.i)}${n.t}</a>`).join('');
+  const bn = nav.filter(n=>n.id!=='set'), extra = bn.length>5;
+  const bottom = (extra?bn.slice(0,4):bn).map(n=>`<a class="${S.page===n.id?'on':''}" onclick="go('${n.id}')">${ic(n.i)}${n.m}</a>`).join('')
+    + (extra?`<a class="${bn.slice(4).some(n=>n.id===S.page)?'on':''}" onclick="moreMenu()">${ic('more')}Yana</a>`:'');
+  app.innerHTML = `<div class="layout">
+    <aside class="side">
+      <div class="brand"><div class="logo">${logoMark()}</div><div><b>${APP_NAME}</b><small>${esc(st.name||'Klinika')}</small></div></div>
+      <nav class="nav">${sideNav}</nav>
+      <div class="side-foot">
+        <div class="me"><div class="av">${initials(S.user.name)}</div><div><b>${esc(S.user.name)}</b><small>${ROLES[S.user.role]||''}${DEMO?' · demo':''}</small></div><button class="x" title="Chiqish" onclick="logout()">${ic('logout')}</button></div>
+        <div class="credit">Ishlab chiqdi: <a href="https://vectorstudiya.uz" target="_blank" rel="noopener">Vector Studio</a></div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="mtop"><div class="brand"><div class="logo">${logoMark()}</div><div><b>${APP_NAME}</b><small>${esc(st.name||'Klinika')}</small></div></div><span class="sp"></span>
+        ${canManage()?`<button class="x" onclick="go('set')">${ic('gear')}</button>`:''}<button class="x" onclick="logout()">${ic('logout')}</button></div>
+      ${subBanner()}
+      ${PAGES[S.page]()}
+    </main>
+    <nav class="bnav">${bottom}</nav>
+  </div>`;
+  if (S.page==='cal') scrollCal();
+  if (!DEMO && S.user.mustChange && !$('#modal-root').innerHTML) forcePass();
+}
+function moreMenu(){
+  const bn=navItems().filter(n=>n.id!=='set').slice(4);
+  openModal(mHead('Boshqa bo\'limlar')+`<div class="md-b more-list">${[...bn,...(canManage()?[{id:'set',t:'Sozlamalar',i:'gear'}]:[])].map(n=>`<a onclick="go('${n.id}')"><span class="ic b">${ic(n.i)}</span>${n.t}</a>`).join('')}</div>`,'sm');
+}
+// Birinchi kirishda (admin/admin123) parolni almashtirish majburiy
+function forcePass(){
+  openModal(`<div class="md-h"><h3>Yangi parol o'rnating</h3></div><div class="md-b">
+    <p class="mut" style="line-height:1.6;margin-bottom:16px">Xavfsizlik uchun boshlang'ich parolni almashtiring. Parolni hech kimga bermang.</p>
+    <label class="f"><span>Yangi parol (kamida 6 belgi)</span><input class="in" id="fp-1" type="password" autocomplete="new-password"></label>
+    <label class="f"><span>Yana bir marta</span><input class="in" id="fp-2" type="password" autocomplete="new-password"></label>
+  </div><div class="md-f"><button class="btn ghost" onclick="S.user.mustChange=false;logout()">Chiqish</button><button class="btn" id="fp-b" onclick="savePass()">${ic('check')}Saqlash</button></div>`,'sm');
+}
+async function savePass(){
+  const a=$('#fp-1').value, b=$('#fp-2').value;
+  if (a.length<6) return toast('Kamida 6 ta belgi'); if (a!==b) return toast('Parollar bir xil emas'); if (a==='admin123') return toast('Boshqa parol tanlang');
+  $('#fp-b').disabled=true;
+  try { await call('changePass',{pass:a}); S.user={...S.user}; delete S.user.mustChange; LS.set('mv_sess',{token:S.token,user:S.user}); closeModal(); render(); toast('Parol saqlandi'); }
+  catch(e){ $('#fp-b').disabled=false; toast(e.message||"Internet yo'q"); }
+}
+function subBanner(){
+  if (!S.sub || S.sub.days==null || S.sub.days>5) return '';
+  return `<div class="banner">${ic('clock')} Obuna muddati ${S.sub.days<=0?'bugun':S.sub.days+' kundan keyin'} tugaydi. Uzaytirish uchun: ${esc(S.sub.phone||OWNER_PHONE)}</div>`;
+}
+function viewLock(){
+  const ph = (S.sub&&S.sub.phone)||OWNER_PHONE;
+  return `<div class="lock"><div class="card"><div class="ic r">${ic('lock')}</div><h2 style="font-size:21px;font-weight:800">Obuna muddati tugagan</h2>
+  <p class="mut" style="margin:10px 0 22px;line-height:1.6">Ma'lumotlaringiz xavfsiz saqlanmoqda. Dasturdan foydalanishni davom ettirish uchun obunani uzaytiring.</p>
+  <a class="btn" href="tel:${digits(ph)}" style="width:100%">${ic('phone')} ${esc(ph)}</a>
+  <button class="link" style="margin-top:16px" onclick="logout()">Chiqish</button></div></div>`;
+}
+
+// ---------- Login ----------
+function viewLogin(){
+  return `<div class="login">
+    <div class="lg-art">
+      <div class="brand"><div class="logo">${logoMark('#0069F9')}</div><div><b>${APP_NAME}</b><small>Klinikangizga g'amxo'rlik</small></div></div>
+      <h2>Klinikangizni bitta oynadan boshqaring</h2>
+      <p>Qabullar, bemorlar kartasi, kassa va hisobotlar — kompyuterda ham, telefonda ham. Bemorlarga eslatmalar Telegram orqali avtomatik boradi.</p>
+      <div class="lg-stats"><div><b>1 kun · 2 soat</b><small>oldin Telegram eslatma</small></div><div><b>1 klik</b><small>shifokor maoshi</small></div><div><b>24/7</b><small>telefondan nazorat</small></div></div>
+    </div>
+    <div class="lg-form"><form class="lg-box" onsubmit="doLogin(event)">
+      <h1>Xush kelibsiz</h1><p>Hisobingizga kiring</p>
+      <label class="f"><span>Login</span><input class="in" id="lg-l" autocomplete="username" autocapitalize="none" required></label>
+      <label class="f"><span>Parol</span><input class="in" id="lg-p" type="password" autocomplete="current-password" required></label>
+      <div class="lg-err" id="lg-err"></div>
+      <button class="btn" id="lg-b" style="width:100%;padding:13px">Kirish</button>
+      ${DEMO?`<div class="demo"><b>Demo rejim — sinab ko'ring:</b>
+        <button type="button" onclick="demoFill('admin','admin123')">Administrator <span>admin / admin123</span></button>
+        <button type="button" onclick="demoFill('rahbar','1234')">Klinika rahbari <span>rahbar / 1234</span></button>
+        <button type="button" onclick="demoFill('shifokor','1234')">Shifokor <span>shifokor / 1234</span></button></div>`:''}
+      <a class="btn ghost" style="width:100%;margin-top:12px;padding:12px" href="https://t.me/${CRM_BOT}?start=register" target="_blank" rel="noopener">${ic('tg')}Ro'yxatdan o'tish — Telegram orqali</a>
+      <p class="credit" style="text-align:center;margin-top:22px">Ishlab chiqdi: <a href="https://vectorstudiya.uz" target="_blank" rel="noopener">Vector Studio</a></p>
+    </form></div></div>`;
+}
+function demoFill(l,p){ $('#lg-l').value=l; $('#lg-p').value=p; $('#lg-b').click(); }
+async function doLogin(ev){
+  ev.preventDefault(); const b=$('#lg-b'); b.disabled=true; b.textContent='Kirilmoqda...'; $('#lg-err').textContent='';
+  try {
+    const r = await DB.login($('#lg-l').value, $('#lg-p').value);
+    S.token=r.token; S.user=r.user; S.cursor=0; LS.set('mv_sess',{token:r.token,user:r.user});
+    await DB.load(true); S.page=null; render();
+  } catch(e){ $('#lg-err').textContent = e.code==='SUB' ? 'Obuna muddati tugagan' : (e.message||'Xatolik'); b.disabled=false; b.textContent='Kirish'; }
+}
+function logout(silent){
+  if (!silent && !DEMO) call('logout').catch(()=>{});
+  LS.del('mv_sess'); LS.del(CK()); S.user=null; S.token=null; S.page=null; S.cursor=0; S.D=emptyD(); $('#modal-root').innerHTML=''; render();
+}
+
+// ---------- Bosh sahifa ----------
+function pageDash(){
+  const t=today(), m=t.slice(0,7), A=S.D.appointments, P=S.D.payments;
+  const payT=sum(P.filter(p=>p.date===t),'amount'), payY=sum(P.filter(p=>p.date===addDays(t,-1)),'amount');
+  const payM=sum(P.filter(p=>p.date.startsWith(m)),'amount');
+  const apT=A.filter(a=>a.date===t && a.status!=='cancel').sort((a,b)=>a.time.localeCompare(b.time));
+  const came=apT.filter(a=>a.status==='came'||a.status==='done').length;
+  const debtors=S.D.patients.map(p=>({p,d:patientFin(p.id).debt})).filter(x=>x.d>0);
+  const debt=sum(debtors,'d');
+  const mA=A.filter(a=>a.date.startsWith(m) && a.date<=t && a.status!=='cancel' && a.status!=='new');
+  const ns=mA.filter(a=>a.status==='noshow'); const nsRate=mA.length?Math.round(ns.length/mA.length*100):0; const nsLoss=sum(ns,'total');
+  const diff = (payY && (payT>0 || new Date().getHours()>=14)) ? Math.round((payT-payY)/payY*100) : null;   // ertalab "-100%" ko'rsatmaymiz
+  const low = M('stock') ? (S.D.stock||[]).filter(x=>!x.archived && (+x.qty||0)<=(+x.min||0)) : [];
+  const doneM = sum(A.filter(a=>a.status==='done'&&a.date.startsWith(m)),'total');
+  const days=[...Array(14)].map((_,i)=>addDays(t,i-13)); const vals=days.map(d=>sum(P.filter(p=>p.date===d),'amount')); const max=Math.max(...vals,1);
+  const docs=S.D.doctors.filter(d=>!d.archived).map(d=>({d,v:sum(A.filter(a=>a.doctorId===d.id&&a.status==='done'&&a.date.startsWith(m)),'total')})).sort((a,b)=>b.v-a.v);
+  const dmax=Math.max(...docs.map(x=>x.v),1);
+  const hello = new Date().getHours()<12?'Xayrli tong':new Date().getHours()<18?'Xayrli kun':'Xayrli kech';
+  return `<div class="top"><div><h1>${hello}, ${esc(S.user.name.split(' ')[0])}</h1><p>${dateLong(t)}</p></div>
+    <div class="acts">${M('kassa')?`<button class="btn ghost" onclick="openPay({})">${ic('wallet')}<span class="hide-m">To'lov</span></button>`:''}<button class="btn" onclick="openApptForm({date:today()})">${ic('plus')}Yangi qabul</button></div></div>
+  <div class="kpis">
+    ${M('kassa')?`<div class="card kpi"><div class="l"><span class="ic b">${ic('wallet')}</span>Bugungi tushum</div><div class="v">${num(payT)} <small>so'm</small></div><div class="s">${diff==null?'Kecha: '+money(payY):`<b class="${diff>=0?'up':'down'}">${diff>=0?'+':''}${diff}%</b> kechagiga nisbatan`}</div></div>`:''}
+    <div class="card kpi"><div class="l"><span class="ic v">${ic('cal')}</span>Bugungi qabullar</div><div class="v">${came} <small>/ ${apT.length}</small></div><div class="s">${apT.length-came} ta bemor kutilmoqda</div></div>
+    ${M('kassa')?`<div class="card kpi"><div class="l"><span class="ic g">${ic('trend')}</span>${monthName(m)} tushumi</div><div class="v">${short(payM)} <small>so'm</small></div><div class="s">${money(payM)}</div></div>
+    <div class="card kpi" style="cursor:pointer" onclick="go('cash')"><div class="l"><span class="ic r">${ic('alert')}</span>Qarzdorlik</div><div class="v">${short(debt)} <small>so'm</small></div><div class="s">${debtors.length} ta bemorda qarz bor</div></div>`
+    :`<div class="card kpi"><div class="l"><span class="ic g">${ic('check')}</span>${monthName(m)} — bajarilgan ish</div><div class="v">${short(doneM)} <small>so'm</small></div><div class="s">${money(doneM)}</div></div>
+    <div class="card kpi"><div class="l"><span class="ic b">${ic('users')}</span>Bemorlar bazasi</div><div class="v">${S.D.patients.length}</div><div class="s">jami bemor</div></div>
+    <div class="card kpi"><div class="l"><span class="ic r">${ic('x')}</span>Shu oy kelmadi</div><div class="v">${ns.length}</div><div class="s">${nsRate}% qabullar</div></div>`}
+  </div>
+  ${low.length?`<div class="card alert warn" style="cursor:pointer" onclick="go('stock')"><span class="ic a">${ic('box')}</span><div><b>Omborda ${low.length} ta material kam qoldi</b><div class="mut" style="margin-top:2px">${low.slice(0,3).map(x=>esc(x.name)).join(', ')}${low.length>3?' va boshqalar':''} — buyurtma bering.</div></div></div>`:''}
+  ${ns.length?`<div class="card alert"><span class="ic r">${ic('alert')}</span><div><b>Shu oy ${ns.length} ta bemor qabulga kelmadi (${nsRate}%)</b><div class="mut" style="margin-top:2px">Bu taxminan <b style="color:var(--red)">${money(nsLoss)}</b> yo'qotilgan tushum. ${M('telegram')?'Telegram eslatmalar shu raqamni kamaytiradi.':'Telegram eslatmalar moduli shu raqamni kamaytiradi.'}</div></div></div>`:''}
+  <div class="grid2">
+    <div class="card"><div class="card-h"><h3>Bugungi qabullar</h3><button class="link" onclick="go('cal')">Kalendarni ochish →</button></div>
+      ${apT.length?`<div class="tw"><table><tbody>${apT.map(a=>`<tr class="click" onclick="viewAppt('${a.id}')"><td style="width:70px"><b>${a.time}</b></td><td><b>${esc(pName(a.patientId))}</b><div class="mut" style="font-size:12px">${esc(svcNames(a)||'—')}</div></td><td class="hide-m-col"><span style="display:flex;align-items:center;gap:7px"><i class="dot" style="background:${dColor(a.doctorId)}"></i>${esc(dName(a.doctorId))}</span></td><td class="r">${statusTag(a.status)}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty">Bugun qabul yo'q</div>`}
+    </div>
+    <div class="card"><div class="card-h"><h3>Shifokorlar — ${MONTHS[+m.slice(5)-1]}</h3></div><div class="card-b">
+      ${docs.map(x=>`<div class="hb"><div class="hb-t"><b>${esc(x.d.name)}</b><span>${money(x.v)}</span></div><div class="hb-l"><i style="width:${x.v/dmax*100}%;background:${x.d.color}"></i></div></div>`).join('')||'<div class="empty">Shifokor qo\'shilmagan</div>'}
+    </div></div>
+  </div>
+  ${M('kassa')?`<div class="card"><div class="card-h"><h3>Oxirgi 14 kun tushumi</h3><span class="mut">${money(sum(vals))}</span></div><div class="card-b">
+    <div class="bars">${days.map((d,i)=>`<div class="bar ${d===t?'today':''}" title="${dateShort(d)}: ${money(vals[i])}"><i style="height:${vals[i]/max*100}%"></i><span>${+d.slice(8)}</span></div>`).join('')}</div>
+  </div></div>`:''}`;
+}
+
+// ---------- Qabullar kalendari ----------
+const SLOT=30, SH=46;
+function pageCal(){
+  const d=S.calDate, st=S.D.settings, s=toMin(st.workStart||'08:00'), e=toMin(st.workEnd||'20:00'), n=Math.max(1,(e-s)/SLOT);
+  const docs=visDocs(); let shown=docs; if (!isDoc() && S.calDoc!=='all') shown=docs.filter(x=>x.id===S.calDoc);
+  const ap=S.D.appointments.filter(a=>a.date===d && a.status!=='cancel');
+  const canceled=S.D.appointments.filter(a=>a.date===d && a.status==='cancel' && shown.some(x=>x.id===a.doctorId));
+  const isSun=new Date(d+'T00:00').getDay()===0;
+  const nm=toMin(nowHM()); const showNow=d===today() && nm>=s && nm<=e;
+  const times=[...Array(n)].map((_,i)=>i%2===0?`<div style="top:${i*SH}px">${fromMin(s+i*SLOT)}</div>`:'').join('');
+  const cols=shown.map(doc=>`<div class="cal-col ${isSun?'off':''}" style="height:${n*SH}px;--h:${SH}px" onclick="calClick(event,'${doc.id}')">
+    ${ap.filter(a=>a.doctorId===doc.id).map(a=>{ const top=(toMin(a.time)-s)/SLOT*SH, h=Math.max(SH-4,(a.dur||30)/SLOT*SH-4);
+      return `<div class="ap ${a.status}" style="--c:${doc.color};top:${top+2}px;height:${h}px" onclick="event.stopPropagation();viewAppt('${a.id}')">
+        <b>${esc(pName(a.patientId))}</b><small>${a.time}–${fromMin(toMin(a.time)+(a.dur||30))} · ${STATUS[a.status]}</small>${h>60?`<small>${esc(svcNames(a))}</small>`:''}</div>`; }).join('')}
+    ${showNow?`<div class="now" style="top:${(nm-s)/SLOT*SH}px"></div>`:''}</div>`).join('');
+  const chips = isDoc()?'':`<div class="seg"><button class="${S.calDoc==='all'?'on':''}" onclick="S.calDoc='all';render()">Hammasi</button>${docs.map(x=>`<button class="${S.calDoc===x.id?'on':''}" onclick="S.calDoc='${x.id}';render()"><i class="dot" style="background:${x.color};margin-right:6px"></i>${esc(x.name.replace(/^Dr\.\s*/,''))}</button>`).join('')}</div>`;
+  return `<div class="top"><div><h1>Qabullar</h1><p>${ap.length} ta qabul · bo'sh joyni bosib yangi qabul qo'shing</p></div>
+    <div class="acts"><button class="btn" onclick="openApptForm({date:S.calDate})">${ic('plus')}Yangi qabul</button></div></div>
+  <div class="cal-bar">
+    <button class="x" onclick="S.calDate=addDays(S.calDate,-1);render()">${ic('left')}</button>
+    <button class="btn ghost sm" onclick="S.calDate=today();render()">Bugun</button>
+    <button class="x" onclick="S.calDate=addDays(S.calDate,1);render()">${ic('right')}</button>
+    <h2>${dateLong(d)}</h2>
+    <input type="date" class="in" style="width:auto;min-height:36px;padding:6px 10px" value="${d}" onchange="if(this.value){S.calDate=this.value;render()}">
+  </div>
+  ${chips?`<div style="margin-bottom:12px;overflow-x:auto">${chips}</div>`:''}
+  ${shown.length?`<div class="card cal" id="cal"><div class="cal-in" style="grid-template-columns:62px repeat(${shown.length},minmax(200px,1fr))">
+    <div class="cal-hd c0"></div>
+    ${shown.map(doc=>`<div class="cal-hd"><i class="dot" style="background:${doc.color}"></i><div>${esc(doc.name)}<small>${esc(doc.spec||'')}</small></div></div>`).join('')}
+    <div class="cal-times" style="height:${n*SH}px;position:sticky;left:0">${times}</div>
+    ${cols}
+  </div></div>`:`<div class="card empty">Avval Sozlamalar → Shifokorlar bo'limida shifokor qo'shing</div>`}
+  <div class="legend"><span><span class="tag t-new">Kutilmoqda</span></span><span><span class="tag t-came">Keldi</span></span><span><span class="tag t-done">Yakunlandi</span></span><span><span class="tag t-noshow">Kelmadi</span></span>${canceled.length?`<span>· Bekor qilingan: ${canceled.length} ta</span>`:''}</div>`;
+}
+function scrollCal(){
+  const c=$('#cal'); if(!c) return; const s=toMin(S.D.settings.workStart||'08:00');
+  const ap=S.D.appointments.filter(a=>a.date===S.calDate && a.status!=='cancel').map(a=>toMin(a.time));
+  const target = S.calDate===today() ? toMin(nowHM())-60 : (ap.length?Math.min(...ap)-30:s);
+  c.scrollTop = Math.max(0,(target-s)/SLOT*SH);
+}
+function calClick(ev, docId){
+  const r=ev.currentTarget.getBoundingClientRect(); const s=toMin(S.D.settings.workStart||'08:00');
+  const m = s + Math.floor((ev.clientY-r.top)/SH)*SLOT;
+  openApptForm({doctorId:docId, date:S.calDate, time:fromMin(m)});
+}
+
+// ---------- Qabul formasi ----------
+let AF=null;
+function timeOptions(sel){
+  const st=S.D.settings; const s=toMin(st.workStart||'08:00'), e=toMin(st.workEnd||'20:00'); const out=[];
+  for (let m=s;m<e;m+=15) out.push(fromMin(m)); if (sel && !out.includes(sel)) out.push(sel);
+  return out.sort().map(t=>`<option ${t===sel?'selected':''}>${t}</option>`).join('');
+}
+function openApptForm(pre={}, id=null){
+  const a = id ? {...byId('appointments',id)} : {id:null, patientId:pre.patientId||'', doctorId:pre.doctorId||(isDoc()?S.user.doctorId:((visDocs()[0]||{}).id||'')), date:pre.date||S.calDate, time:pre.time||'09:00', dur:30, services:[], total:0, note:'', status:'new'};
+  AF = a; AF._new = null;
+  const docs = visDocs();
+  openModal(mHead(id?'Qabulni tahrirlash':'Yangi qabul')+`<div class="md-b">
+    <div class="f"><span class="fl">Bemor</span><div id="af-p"></div></div>
+    <div class="row"><label class="f"><span>Shifokor</span><select class="in" id="af-doc">${docs.map(d=>`<option value="${d.id}" ${d.id===a.doctorId?'selected':''}>${esc(d.name)}</option>`).join('')}</select></label>
+      <label class="f"><span>Sana</span><input type="date" class="in" id="af-date" value="${a.date}"></label></div>
+    <div class="row"><label class="f"><span>Vaqt</span><select class="in" id="af-time">${timeOptions(a.time)}</select></label>
+      <label class="f"><span>Davomiyligi</span><select class="in" id="af-dur">${[15,30,45,60,90,120].map(m=>`<option value="${m}" ${m===(a.dur||30)?'selected':''}>${m<60?m+' daqiqa':(m/60)+' soat'}</option>`).join('')}</select></label></div>
+    <div class="f"><span class="fl">Xizmatlar</span><div class="svc-list">${S.D.services.filter(x=>!x.archived).map(x=>`<label class="svc"><input type="checkbox" class="svc-cb" value="${x.id}" ${(a.services||[]).includes(x.id)?'checked':''} onchange="afTotal()">${esc(x.name)}<em>${num(x.price)}</em></label>`).join('')||'<div class="empty">Xizmatlar qo\'shilmagan</div>'}</div></div>
+    <div class="row"><label class="f"><span>Jami summa (so'm)</span><input class="in" id="af-total" type="number" min="0" step="1000" value="${a.total||0}"></label><div></div></div>
+    <label class="f"><span>Izoh</span><textarea class="in" id="af-note" rows="2" placeholder="Masalan: tish og'rig'i, birinchi marta">${esc(a.note)}</textarea></label>
+  </div><div class="md-f"><button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn" onclick="saveAppt()">${ic('check')}Saqlash</button></div>`);
+  renderPP();
+}
+function afTotal(){ $('#af-total').value = sum($$('.svc-cb:checked').map(x=>byId('services',x.value)),'price'); }
+function renderPP(){
+  const el=$('#af-p'); const p=AF.patientId && byId('patients',AF.patientId);
+  if (p) { el.innerHTML=`<div class="pp-sel"><div class="who"><div class="av">${initials(p.name)}</div><div><b>${esc(p.name)}</b><small>${esc(p.phone)}</small></div></div><button class="btn ghost sm" onclick="AF.patientId='';renderPP()">O'zgartirish</button></div>`; return; }
+  if (AF._new) { el.innerHTML=`<div class="row"><input class="in" id="np-name" placeholder="Ism familiya" value="${esc(AF._new.name||'')}"><input class="in" id="np-phone" placeholder="+998 90 123 45 67" inputmode="tel" value="${esc(AF._new.phone||'')}"></div><button class="link" style="margin-top:8px" onclick="AF._new=null;renderPP()">← Bazadan tanlash</button>`; setTimeout(()=>$('#np-name')&&$('#np-name').focus(),30); return; }
+  el.innerHTML=`<div class="pp"><div class="srch" style="max-width:none">${ic('search')}<input class="in" id="pp-q" placeholder="Ism yoki telefon raqam bo'yicha qidiring" oninput="ppList()" autocomplete="off"></div><div class="pp-list" id="pp-l"></div></div>`; ppList();
+}
+function ppList(){
+  const q=($('#pp-q').value||'').toLowerCase().trim(), qd=digits(q);
+  const r=S.D.patients.filter(p=>!q || p.name.toLowerCase().includes(q) || (qd.length>=3 && digits(p.phone).includes(qd))).slice(0,5);
+  $('#pp-l').innerHTML = r.map(p=>`<div class="pp-i" onclick="AF.patientId='${p.id}';renderPP()"><b>${esc(p.name)}</b><small>${esc(p.phone)}</small></div>`).join('') + `<div class="pp-i add" onclick="ppNew()">+ Yangi bemor qo'shish</div>`;
+}
+function ppNew(){ const q=($('#pp-q').value||'').trim(); AF._new = /\d{3}/.test(q)?{phone:q}:{name:q}; renderPP(); }
+async function saveAppt(){
+  const a = {...AF};
+  if (AF._new) {
+    const name=$('#np-name').value.trim(), phone=$('#np-phone').value.trim();
+    if (!name) return toast('Bemor ismini kiriting');
+    if (phone) { const dup=S.D.patients.find(p=>digits(p.phone).slice(-9)===digits(phone).slice(-9)); if (dup) { AF.patientId=dup.id; AF._new=null; renderPP(); return toast('Bu raqam bazada bor — '+dup.name+' tanlandi'); } }
+    const p={id:uid('p'), name, phone, createdAt:today(), teeth:{}, note:''};
+    await DB.save('patients',p); AF.patientId=p.id; AF._new=null; a.patientId=p.id;
+  }
+  if (!a.patientId) return toast('Bemorni tanlang');
+  delete a._new;
+  a.doctorId=$('#af-doc').value; a.date=$('#af-date').value; a.time=$('#af-time').value; a.dur=+$('#af-dur').value;
+  a.services=$$('.svc-cb:checked').map(x=>x.value); a.total=Math.max(0,+$('#af-total').value||0); a.note=$('#af-note').value.trim();
+  if (!a.doctorId) return toast('Shifokorni tanlang');
+  if (!a.date) return toast('Sanani tanlang');
+  const s=toMin(a.time), e=s+a.dur;
+  const clash=S.D.appointments.find(x=>x.id!==a.id && x.doctorId===a.doctorId && x.date===a.date && !['cancel','noshow'].includes(x.status) && toMin(x.time)<e && toMin(x.time)+(x.dur||30)>s);
+  if (clash) return toast(`Bu vaqtda shifokor band: ${clash.time} — ${pName(clash.patientId)}`);
+  const isNew=!a.id;
+  if (isNew) { a.id=uid('a'); a.createdAt=new Date().toISOString(); a.createdBy=S.user.name; }
+  else if (a.date!==byId('appointments',a.id).date || a.time!==byId('appointments',a.id).time) a.rem={};   // vaqt o'zgarsa, eslatma qaytadan boradi
+  await DB.save('appointments',a); closeModal(); S.calDate=a.date; render(); toast(isNew?'Qabul qo\'shildi':'Saqlandi');
+}
+
+// ---------- Qabulni ko'rish ----------
+function viewAppt(id){
+  const a=byId('appointments',id); if(!a) return; const p=byId('patients',a.patientId)||{name:'—',phone:''};
+  const paid=apptPaid(id), rest=Math.max(0,(a.status==='done'?a.total:0)-paid);
+  const sts=[['came','Keldi','user'],['done','Yakunlash','check'],['noshow','Kelmadi','x'],['cancel','Bekor','clock']];
+  openModal(mHead('Qabul ma\'lumotlari')+`<div class="md-b">
+    <div style="display:flex;align-items:center;gap:12px"><div class="av lg">${initials(p.name)}</div><div style="flex:1;min-width:0">
+      <a class="link" style="font-size:17px" onclick="openPatient('${p.id}')">${esc(p.name)}</a>
+      <div class="mut" style="margin-top:2px">${p.phone?`<a href="tel:${digits(p.phone)}" style="text-decoration:none">${esc(p.phone)}</a>`:''} ${p.tgChatId?`<span class="tg" title="Telegram ulangan">${ic('tg')}</span>`:''}</div></div>${statusTag(a.status)}</div>
+    <div class="info">
+      <div><small>Sana</small><b>${dateShort(a.date)}</b></div><div><small>Vaqt</small><b>${a.time}–${fromMin(toMin(a.time)+(a.dur||30))}</b></div>
+      <div><small>Shifokor</small><b>${esc(dName(a.doctorId).replace(/^Dr\.\s*/,''))}</b></div>
+      <div><small>Summa</small><b>${money(a.total)}</b></div><div><small>To'langan</small><b style="color:var(--green)">${money(paid)}</b></div><div><small>Qoldiq</small><b style="color:${rest?'var(--red)':'inherit'}">${money(rest)}</b></div>
+    </div>
+    ${(a.services||[]).length?`<div class="fl">Xizmatlar</div><div class="chips">${a.services.map(sid=>{const s=byId('services',sid);return s?`<span class="chip">${esc(s.name)}</span>`:''}).join('')}</div>`:''}
+    ${a.note?`<div class="fl" style="margin-top:14px">Izoh</div><p style="font-weight:600">${esc(a.note)}</p>`:''}
+    ${a.diag?`<div class="fl" style="margin-top:14px">Bajarilgan ish / tashxis</div><p style="font-weight:600">${esc(a.diag)}</p>`:''}
+    <div class="st-row">${sts.map(([k,t,i])=>`<button class="${a.status===k?'on':''}" onclick="setStatus('${id}','${k}')">${ic(i)}${t}</button>`).join('')}</div>
+  </div><div class="md-f">
+    ${canManage()||isDoc()?`<button class="btn danger" onclick="delAppt('${id}')">O'chirish</button>`:''}<span style="flex:1"></span>
+    <button class="btn ghost" onclick="openApptForm({},'${id}')">Tahrirlash</button>
+    ${isDoc()||!M('kassa')?'':`<button class="btn green" onclick="openPay({patientId:'${p.id}',appointmentId:'${id}',amount:${rest}})">${ic('wallet')}To'lov</button>`}
+  </div>`);
+}
+async function setStatus(id, st){
+  if (st==='done') return openDone(id);
+  const a={...byId('appointments',id), status:st}; await DB.save('appointments',a); render(); viewAppt(id); toast(STATUS[st]);
+}
+function delAppt(id){ ask('Bu qabulni o\'chirasizmi? To\'lovlar saqlanib qoladi.', async()=>{ await DB.del('appointments',id); render(); toast('O\'chirildi'); }); }
+function openDone(id){
+  const a=byId('appointments',id); const paid=apptPaid(id); _dnPaid=paid;
+  openModal(mHead('Qabulni yakunlash')+`<div class="md-b">
+    <div class="who" style="margin-bottom:16px"><div class="av">${initials(pName(a.patientId))}</div><div><b>${esc(pName(a.patientId))}</b><small>${dateShort(a.date)} · ${a.time} · ${esc(dName(a.doctorId))}</small></div></div>
+    <div class="f"><span class="fl">Bajarilgan xizmatlar</span><div class="svc-list">${S.D.services.filter(x=>!x.archived||(a.services||[]).includes(x.id)).map(x=>`<label class="svc"><input type="checkbox" class="svc-cb" value="${x.id}" ${(a.services||[]).includes(x.id)?'checked':''} onchange="dnTotal()">${esc(x.name)}<em>${num(x.price)}</em></label>`).join('')}</div></div>
+    <div class="row"><label class="f"><span>Jami summa (so'm)</span><input class="in" id="dn-total" type="number" min="0" step="1000" value="${a.total||0}" oninput="dnPay()"></label>
+      <label class="f"><span>Hozir to'lanadi</span><input class="in" id="dn-pay" type="number" min="0" step="1000" value="${Math.max(0,(a.total||0)-paid)}"></label></div>
+    ${isDoc()||!M('kassa')?'':`<div class="f"><span class="fl">To'lov turi</span><div class="pills">${Object.entries(METHODS).map(([k,v],i)=>`<label class="pill"><input type="radio" name="dn-m" value="${k}" ${i?'':'checked'}><span>${v}</span></label>`).join('')}</div></div>`}
+    <label class="f"><span>Bajarilgan ish / tashxis</span><textarea class="in" id="dn-diag" rows="3" placeholder="Masalan: 36-tishga plomba qo'yildi">${esc(a.diag||'')}</textarea></label>
+    ${paid?`<p class="mut">Avval to'langan: ${money(paid)}</p>`:''}
+  </div><div class="md-f"><button class="btn ghost" onclick="viewAppt('${id}')">Orqaga</button><button class="btn green" onclick="saveDone('${id}')">${ic('check')}Yakunlash</button></div>`);
+  if (isDoc()||!M('kassa')) { $('#dn-pay').closest('label').style.display='none'; }
+}
+function dnTotal(){ $('#dn-total').value = sum($$('.svc-cb:checked').map(x=>byId('services',x.value)),'price'); dnPay(); }
+let _dnPaid=0;
+function dnPay(){ $('#dn-pay').value = Math.max(0,(+$('#dn-total').value||0)-_dnPaid); }
+async function saveDone(id){
+  const a={...byId('appointments',id)}; a.status='done'; a.services=$$('.svc-cb:checked').map(x=>x.value); a.total=Math.max(0,+$('#dn-total').value||0); a.diag=$('#dn-diag').value.trim(); a.doneAt=new Date().toISOString();
+  await DB.save('appointments',a);
+  const amt = (isDoc()||!M('kassa'))?0:Math.max(0,+$('#dn-pay').value||0);
+  if (amt>0) { const m=($('input[name=dn-m]:checked')||{}).value||'naqd'; await DB.save('payments',{id:uid('y'),patientId:a.patientId,appointmentId:id,amount:amt,method:m,date:today(),time:nowHM(),by:S.user.name}); }
+  closeModal(); render(); toast(amt>0?`Yakunlandi · ${money(amt)} qabul qilindi`:'Qabul yakunlandi');
+}
+
+// ---------- To'lov ----------
+function openPay(pre){
+  const pts=S.D.patients.map(p=>({p,d:patientFin(p.id).debt})).sort((a,b)=>b.d-a.d||a.p.name.localeCompare(b.p.name));
+  openModal(mHead("To'lov qabul qilish")+`<div class="md-b">
+    <label class="f"><span>Bemor</span><select class="in" id="py-p" onchange="pyDebt()">${pre.patientId?'':'<option value="">— tanlang —</option>'}${pts.map(x=>`<option value="${x.p.id}" ${x.p.id===pre.patientId?'selected':''}>${esc(x.p.name)}${x.d?' — qarz '+num(x.d):''}</option>`).join('')}</select></label>
+    <div id="py-info" class="mut" style="margin:-6px 0 12px"></div>
+    <label class="f"><span>Summa (so'm)</span><input class="in" id="py-a" type="number" min="0" step="1000" value="${pre.amount||''}" placeholder="0" style="font-size:18px;font-weight:800"></label>
+    <div class="f"><span class="fl">To'lov turi</span><div class="pills">${Object.entries(METHODS).map(([k,v],i)=>`<label class="pill"><input type="radio" name="py-m" value="${k}" ${i?'':'checked'}><span>${v}</span></label>`).join('')}</div></div>
+    <label class="f"><span>Izoh</span><input class="in" id="py-n" placeholder="Ixtiyoriy"></label>
+  </div><div class="md-f"><button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn green" onclick="savePay('${pre.appointmentId||''}')">${ic('check')}Qabul qilish</button></div>`);
+  pyDebt(pre.amount==null);
+}
+function pyDebt(fill=true){ const id=$('#py-p').value; if(!id){$('#py-info').textContent='';return} const f=patientFin(id); $('#py-info').innerHTML = f.debt?`Qarzi: <b style="color:var(--red)">${money(f.debt)}</b>`:f.adv?`Avans: <b style="color:var(--green)">${money(f.adv)}</b>`:'Qarzi yo\'q'; if(fill && f.debt && !$('#py-a').value) $('#py-a').value=f.debt; }
+async function savePay(apId){
+  const pid=$('#py-p').value, amt=Math.round(+$('#py-a').value||0);
+  if (!pid) return toast('Bemorni tanlang'); if (amt<=0) return toast('Summani kiriting');
+  await DB.save('payments',{id:uid('y'),patientId:pid,appointmentId:apId||null,amount:amt,method:$('input[name=py-m]:checked').value,date:today(),time:nowHM(),by:S.user.name,note:$('#py-n').value.trim()});
+  closeModal(); render(); toast(money(amt)+' qabul qilindi');
+}
+function delPay(id){ ask("Bu to'lovni o'chirasizmi? Kassa hisobi o'zgaradi.", async()=>{ await DB.del('payments',id); render(); toast("To'lov o'chirildi"); }); }
+
+// ---------- Bemorlar ----------
+function myPatients(){ if(!isDoc()) return S.D.patients; const ids=new Set(visAppts().map(a=>a.patientId)); return S.D.patients.filter(p=>ids.has(p.id)); }
+function pagePat(){
+  const list=myPatients();
+  return `<div class="top"><div><h1>Bemorlar</h1><p>${list.length} ta bemor bazada</p></div>
+    <div class="acts"><div class="srch">${ic('search')}<input class="in" placeholder="Ism yoki telefon" value="${esc(S.patQ)}" oninput="S.patQ=this.value;$('#pat-tb').innerHTML=patRows()"></div>
+    <button class="btn" onclick="openPatForm()">${ic('plus')}<span class="hide-m">Yangi bemor</span></button></div></div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Bemor</th><th class="hide-m-col">Telefon</th><th class="hide-m-col">Oxirgi tashrif</th><th class="hide-m-col">Tashriflar</th><th class="r">Holat</th></tr></thead><tbody id="pat-tb">${patRows()}</tbody></table></div></div>`;
+}
+function patRows(){
+  const q=S.patQ.toLowerCase().trim(), qd=digits(q);
+  const list=myPatients().filter(p=>!q||p.name.toLowerCase().includes(q)||(qd.length>=3&&digits(p.phone).includes(qd)))
+    .map(p=>({p,lv:lastVisit(p.id),f:patientFin(p.id),c:S.D.appointments.filter(a=>a.patientId===p.id&&a.status==='done').length}))
+    .sort((a,b)=>(b.lv||b.p.createdAt||'').localeCompare(a.lv||a.p.createdAt||''));
+  if (!list.length) return `<tr><td colspan="5" class="empty">Bemor topilmadi</td></tr>`;
+  return list.map(({p,lv,f,c})=>`<tr class="click" onclick="openPatient('${p.id}')">
+    <td><div class="who"><div class="av">${initials(p.name)}</div><div><b>${esc(p.name)}</b>${p.tgChatId?` <span class="tg" title="Telegram ulangan">${ic('tg')}</span>`:''}<small>${esc(p.phone||'')}</small></div></div></td>
+    <td class="hide-m-col">${esc(p.phone||'—')}</td><td class="hide-m-col">${lv?dateShort(lv):'—'}</td><td class="hide-m-col">${c}</td>
+    <td class="r">${!M('kassa')?'<span class="mut">—</span>':f.debt?`<span class="tag t-debt">Qarz ${num(f.debt)}</span>`:f.adv?`<span class="tag t-adv">Avans ${num(f.adv)}</span>`:'<span class="mut">—</span>'}</td></tr>`).join('');
+}
+function openPatForm(id){
+  const p = id ? byId('patients',id) : {name:'',phone:'',birth:'',gender:'',address:'',note:''};
+  openModal(mHead(id?'Bemorni tahrirlash':'Yangi bemor')+`<div class="md-b">
+    <label class="f"><span>Ism familiya</span><input class="in" id="pf-name" value="${esc(p.name)}"></label>
+    <div class="row"><label class="f"><span>Telefon</span><input class="in" id="pf-phone" inputmode="tel" placeholder="+998 90 123 45 67" value="${esc(p.phone)}"></label>
+      <label class="f"><span>Tug'ilgan sana</span><input class="in" id="pf-birth" type="date" value="${esc(p.birth)}"></label></div>
+    <div class="row"><label class="f"><span>Jinsi</span><select class="in" id="pf-gender"><option value="">—</option><option value="erkak" ${p.gender==='erkak'?'selected':''}>Erkak</option><option value="ayol" ${p.gender==='ayol'?'selected':''}>Ayol</option></select></label>
+      <label class="f"><span>Manzil</span><input class="in" id="pf-addr" value="${esc(p.address||'')}"></label></div>
+    <label class="f"><span>Izoh (allergiya, kasalliklar va h.k.)</span><textarea class="in" id="pf-note" rows="3">${esc(p.note||'')}</textarea></label>
+  </div><div class="md-f">${id&&canManage()?`<button class="btn danger" onclick="delPatient('${id}')">O'chirish</button><span style="flex:1"></span>`:''}<button class="btn ghost" onclick="${id?`openPatient('${id}')`:'closeModal()'}">Bekor</button><button class="btn" onclick="savePatient('${id||''}')">${ic('check')}Saqlash</button></div>`);
+  setTimeout(()=>!id&&$('#pf-name').focus(),50);
+}
+async function savePatient(id){
+  const name=$('#pf-name').value.trim(), phone=$('#pf-phone').value.trim(); if(!name) return toast('Ismni kiriting');
+  if (phone) { const dup=S.D.patients.find(x=>x.id!==id && digits(x.phone).slice(-9)===digits(phone).slice(-9)); if(dup) return toast('Bu raqam bilan bemor bor: '+dup.name); }
+  const old = id ? byId('patients',id) : {id:uid('p'), createdAt:today(), teeth:{}};
+  const p = {...old, name, phone, birth:$('#pf-birth').value, gender:$('#pf-gender').value, address:$('#pf-addr').value.trim(), note:$('#pf-note').value.trim()};
+  await DB.save('patients',p); render(); openPatient(p.id); toast('Saqlandi');
+}
+function delPatient(id){
+  if (S.D.appointments.some(a=>a.patientId===id) || S.D.payments.some(x=>x.patientId===id)) return toast("Bemorning tarixi bor — o'chirib bo'lmaydi");
+  ask("Bemorni o'chirasizmi?", async()=>{ await DB.del('patients',id); render(); toast("O'chirildi"); });
+}
+function openPatient(id, tab){
+  const p=byId('patients',id); if(!p) return; if (tab) S.pTab=tab; if (S.pTab==='teeth'&&!dental()) S.pTab='hist';
+  const f=patientFin(id);
+  const ap=S.D.appointments.filter(a=>a.patientId===id && (!isDoc()||a.doctorId===S.user.doctorId)).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  const pays=S.D.payments.filter(x=>x.patientId===id).sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
+  const age = p.birth ? Math.floor((Date.now()-new Date(p.birth+'T00:00'))/31557600000) : null;
+  const tabs=[['hist','Tashriflar ('+ap.length+')'],...(isDoc()||!M('kassa')?[]:[['pay',"To'lovlar ("+pays.length+')']]),...(dental()?[['teeth','Tish formulasi']]:[]),['info',"Ma'lumot"]];
+  let body='';
+  if (S.pTab==='hist') body = ap.length ? ap.map(a=>`<div class="hist" onclick="viewAppt('${a.id}')"><div class="hist-t"><div><b>${dateShort(a.date)} · ${a.time}</b> <span class="mut">— ${esc(dName(a.doctorId))}</span></div>${statusTag(a.status)}</div>
+      <p>${esc(svcNames(a)||'Xizmat belgilanmagan')}${a.total?` · <b>${money(a.total)}</b>`:''}</p>${a.diag?`<p class="mut">${esc(a.diag)}</p>`:''}</div>`).join('') : '<div class="empty">Hali tashrif yo\'q</div>';
+  if (S.pTab==='pay') body = pays.length ? `<div class="card" style="box-shadow:none"><div class="tw"><table><thead><tr><th>Sana</th><th>Summa</th><th>Turi</th><th>Qabul qildi</th></tr></thead><tbody>${pays.map(x=>`<tr><td>${dateShort(x.date)} ${x.time||''}</td><td><b>${money(x.amount)}</b></td><td>${METHODS[x.method]||x.method}</td><td>${esc(x.by||'')}</td></tr>`).join('')}</tbody></table></div></div>` : '<div class="empty">To\'lov yo\'q</div>';
+  if (S.pTab==='teeth') body = teethChart(p);
+  if (S.pTab==='info') body = `<div class="info" style="margin-top:0"><div><small>Telefon</small><b>${esc(p.phone||'—')}</b></div><div><small>Tug'ilgan sana</small><b>${p.birth?dateShort(p.birth):'—'}</b></div><div><small>Jinsi</small><b>${p.gender?p.gender[0].toUpperCase()+p.gender.slice(1):'—'}</b></div><div><small>Manzil</small><b>${esc(p.address||'—')}</b></div><div><small>Ro'yxatdan o'tgan</small><b>${dateShort(p.createdAt)}</b></div><div><small>Telegram</small><b>${p.tgChatId?'Ulangan ✓':M('telegram')&&tgLink()?`<a class="link" onclick="copyTxt(tgLink())">Bot havolasini nusxalash</a>`:'Ulanmagan'}</b></div></div>${p.note?`<div class="fl">Izoh</div><p style="font-weight:600;line-height:1.55">${esc(p.note)}</p>`:''}`;
+  openModal(mHead('Bemor kartasi')+`<div class="md-b">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="av lg">${initials(p.name)}</div><div style="flex:1;min-width:160px"><div style="font-size:19px;font-weight:800">${esc(p.name)}</div>
+      <div class="mut" style="margin-top:3px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">${p.phone?`<a href="tel:${digits(p.phone)}" style="text-decoration:none;display:inline-flex;gap:5px;align-items:center">${ic('phone')}${esc(p.phone)}</a>`:''}${age!=null?`<span>${age} yosh</span>`:''}${p.tgChatId?`<span class="tg">${ic('tg')}</span>`:''}</div></div></div>
+    ${isDoc()||!M('kassa')?'':`<div class="fin"><div><small>Jami xizmatlar</small><b>${money(f.charged)}</b></div><div><small>To'langan</small><b style="color:var(--green)">${money(f.paid)}</b></div><div><small>${f.adv?'Avans':'Qarz'}</small><b style="color:${f.debt?'var(--red)':f.adv?'var(--green)':'inherit'}">${money(f.debt||f.adv)}</b></div></div>`}
+    <div class="tabs">${tabs.map(([k,t])=>`<button class="${S.pTab===k?'on':''}" onclick="openPatient('${id}','${k}')">${t}</button>`).join('')}</div>
+    ${body}
+  </div><div class="md-f"><button class="btn ghost" onclick="openPatForm('${id}')">Tahrirlash</button><span style="flex:1"></span>
+    ${isDoc()||!M('kassa')?'':`<button class="btn ghost" onclick="openPay({patientId:'${id}'})">${ic('wallet')}To'lov</button>`}
+    <button class="btn" onclick="openApptForm({patientId:'${id}'})">${ic('plus')}Qabulga yozish</button></div>`, 'wide');
+}
+
+// ---------- Tish formulasi ----------
+const TEETH_UP=[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28], TEETH_DN=[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
+const TS = {healthy:{t:"Sog'lom",c:'#FFFFFF'},caries:{t:'Karies',c:'#FDE68A'},treat:{t:'Davolanmoqda',c:'#FECACA'},filled:{t:'Plomba',c:'#BFDBFE'},rct:{t:'Kanal davolangan',c:'#DDD6FE'},crown:{t:'Koronka',c:'#FBCFE8'},implant:{t:'Implant',c:'#A7F3D0'},missing:{t:'Olingan',c:'none'}};
+function toothSvg(st, up){
+  const c=(TS[st]||TS.healthy).c, miss=st==='missing';
+  const path = up ? 'M6 4c2-2 4-1 8-1s6-1 8 1c2 3 1 7-1 10-1 2-1 6-2 12-.5 3-2 3-2.5 0l-1-7c-.3-1.5-2.7-1.5-3 0l-1 7c-.5 3-2 3-2.5 0-1-6-1-10-2-12C5 11 4 7 6 4z'
+                  : 'M6 28c2 2 4 1 8 1s6 1 8-1c2-3 1-7-1-10-1-2-1-6-2-12-.5-3-2-3-2.5 0l-1 7c-.3 1.5-2.7 1.5-3 0l-1-7c-.5-3-2-3-2.5 0-1 6-1 10-2 12-2 3-3 7-1 10z';
+  return `<svg viewBox="0 0 28 32"><path d="${path}" fill="${miss?'none':c}" stroke="${miss?'#98A2B3':'#7C8BA8'}" stroke-width="1.3" ${miss?'stroke-dasharray="2.5 2"':''}/>${st==='implant'?'<path d="M14 9v14M11 12h6M11 16h6M11 20h6" stroke="#067647" stroke-width="1.3"/>':''}</svg>`;
+}
+function teethChart(p){
+  const T=p.teeth||{}; const sel=S.selTooth;
+  const jaw=(arr,up)=>`<div class="jaw">${arr.map((n,i)=>`${i===8?'<span class="mid"></span>':''}<button class="tooth ${sel===n?'sel':''}" title="${n}: ${(TS[T[n]]||TS.healthy).t}" onclick="S.selTooth=${n};openPatient('${p.id}')">${up?'':`<span>${n}</span>`}${toothSvg(T[n],up)}${up?`<span>${n}</span>`:''}</button>`).join('')}</div>`;
+  const counts={}; Object.values(T).forEach(s=>counts[s]=(counts[s]||0)+1);
+  return `<div class="teeth">${jaw(TEETH_UP,true)}${jaw(TEETH_DN,false)}</div>
+    ${sel?`<div class="fl" style="margin-top:14px">${sel}-tish holatini tanlang:</div><div class="tlegend" style="margin-top:6px">${Object.entries(TS).map(([k,v])=>`<button class="${(T[sel]||'healthy')===k?'on':''}" onclick="setTooth('${p.id}',${sel},'${k}')"><i style="background:${v.c==='none'?'#fff':v.c};${k==='missing'?'border-style:dashed':''}"></i>${v.t}</button>`).join('')}</div>`
+      :`<p class="mut" style="margin-top:12px">Tish ustiga bosing va holatini belgilang.</p><div class="tlegend">${Object.entries(TS).filter(([k])=>k!=='healthy').map(([k,v])=>`<button style="cursor:default"><i style="background:${v.c==='none'?'#fff':v.c};${k==='missing'?'border-style:dashed':''}"></i>${v.t}${counts[k]?` · ${counts[k]}`:''}</button>`).join('')}</div>`}`;
+}
+async function setTooth(pid,n,st){
+  const p={...byId('patients',pid)}; p.teeth={...(p.teeth||{})}; if(st==='healthy') delete p.teeth[n]; else p.teeth[n]=st;
+  await DB.save('patients',p); S.selTooth=null; openPatient(pid,'teeth'); toast(`${n}-tish: ${TS[st].t}`);
+}
+
+// ---------- Kassa ----------
+function setRange(k){ const t=today(); if(k==='d'){S.cashFrom=S.cashTo=t} if(k==='y'){S.cashFrom=S.cashTo=addDays(t,-1)} if(k==='w'){S.cashFrom=addDays(t,-6);S.cashTo=t} if(k==='m'){S.cashFrom=t.slice(0,8)+'01';S.cashTo=t} render(); }
+function pageCash(){
+  const f=S.cashFrom, t=S.cashTo, td=today();
+  const P=S.D.payments.filter(p=>p.date>=f && p.date<=t).sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
+  const by=k=>sum(P.filter(p=>p.method===k),'amount');
+  const debtors=S.D.patients.map(p=>({p,d:patientFin(p.id).debt})).filter(x=>x.d>0).sort((a,b)=>b.d-a.d);
+  const rk = f===t&&t===td?'d':f===t&&t===addDays(td,-1)?'y':f===addDays(td,-6)&&t===td?'w':f===td.slice(0,8)+'01'&&t===td?'m':'';
+  return `<div class="top"><div><h1>Kassa</h1><p>${f===t?dateLong(f):dateShort(f)+' — '+dateShort(t)}</p></div>
+    <div class="acts"><button class="btn green" onclick="openPay({})">${ic('plus')}To'lov qabul qilish</button></div></div>
+  <div class="cal-bar"><div class="seg">${[['d','Bugun'],['y','Kecha'],['w','7 kun'],['m','Shu oy']].map(([k,l])=>`<button class="${rk===k?'on':''}" onclick="setRange('${k}')">${l}</button>`).join('')}</div>
+    <input type="date" class="in" style="width:auto;min-height:38px" value="${f}" onchange="S.cashFrom=this.value;if(S.cashTo<this.value)S.cashTo=this.value;render()"><span class="mut">—</span><input type="date" class="in" style="width:auto;min-height:38px" value="${t}" onchange="S.cashTo=this.value;render()"></div>
+  <div class="kpis">
+    <div class="card kpi"><div class="l"><span class="ic b">${ic('wallet')}</span>Jami tushum</div><div class="v">${num(sum(P,'amount'))} <small>so'm</small></div><div class="s">${P.length} ta to'lov</div></div>
+    <div class="card kpi"><div class="l"><span class="ic g">${ic('wallet')}</span>Naqd</div><div class="v">${num(by('naqd'))} <small>so'm</small></div></div>
+    <div class="card kpi"><div class="l"><span class="ic v">${ic('wallet')}</span>Karta</div><div class="v">${num(by('karta'))} <small>so'm</small></div></div>
+    <div class="card kpi"><div class="l"><span class="ic a">${ic('wallet')}</span>Click + Payme</div><div class="v">${num(by('click')+by('payme'))} <small>so'm</small></div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><div class="card-h"><h3>To'lovlar</h3></div>${P.length?`<div class="tw"><table><thead><tr><th>Vaqt</th><th>Bemor</th><th class="hide-m-col">Turi</th><th class="r">Summa</th>${canManage()?'<th></th>':''}</tr></thead><tbody>${P.map(x=>`<tr><td>${f===t?'':dateShort(x.date)+' '}${x.time||''}</td><td><b>${esc(pName(x.patientId))}</b>${x.note?`<div class="mut" style="font-size:12px">${esc(x.note)}</div>`:''}</td><td class="hide-m-col">${METHODS[x.method]||x.method}</td><td class="r"><b>${money(x.amount)}</b></td>${canManage()?`<td class="r"><button class="x" style="width:30px;height:30px" title="O'chirish" onclick="delPay('${x.id}')">${ic('x')}</button></td>`:''}</tr>`).join('')}</tbody></table></div>`:'<div class="empty">Bu davrda to\'lov yo\'q</div>'}</div>
+    <div class="card"><div class="card-h"><h3>Qarzdorlar</h3><span class="tag t-debt">${money(sum(debtors,'d'))}</span></div>${debtors.length?`<div class="tw"><table><tbody>${debtors.map(x=>`<tr class="click" onclick="openPay({patientId:'${x.p.id}'})"><td><b>${esc(x.p.name)}</b><div class="mut" style="font-size:12px">${esc(x.p.phone)}</div></td><td class="r"><b style="color:var(--red)">${money(x.d)}</b></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Qarzdor yo\'q 🎉</div>'}</div>
+  </div>`;
+}
+
+// ---------- Ombor ----------
+function pageStock(){
+  const L=(S.D.stock||[]).filter(x=>!x.archived).sort((a,b)=>((+a.qty||0)>(+a.min||0))-((+b.qty||0)>(+b.min||0))||a.name.localeCompare(b.name));
+  const low=L.filter(x=>(+x.qty||0)<=(+x.min||0)), val=sum(L,x=>(+x.qty||0)*(+x.price||0));
+  const mv=(S.D.stockmoves||[]).slice().sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||''))).slice(0,12);
+  return `<div class="top"><div><h1>Ombor</h1><p>${L.length} xil material · kam qolganlari tepada</p></div>
+    <div class="acts"><button class="btn" onclick="openItem()">${ic('plus')}<span class="hide-m">Yangi material</span></button></div></div>
+  <div class="kpis">
+    <div class="card kpi"><div class="l"><span class="ic b">${ic('box')}</span>Materiallar</div><div class="v">${L.length} <small>xil</small></div></div>
+    <div class="card kpi"><div class="l"><span class="ic a">${ic('alert')}</span>Kam qolgan</div><div class="v">${low.length}</div><div class="s">${low.length?'buyurtma bering':'hammasi yetarli'}</div></div>
+    <div class="card kpi"><div class="l"><span class="ic g">${ic('wallet')}</span>Ombor qiymati</div><div class="v">${short(val)} <small>so'm</small></div><div class="s">${money(val)}</div></div>
+    <div class="card kpi"><div class="l"><span class="ic v">${ic('clock')}</span>Oxirgi harakat</div><div class="v" style="font-size:18px">${mv[0]?dateShort(mv[0].date):'—'}</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><div class="card-h"><h3>Qoldiq</h3></div>${L.length?`<div class="tw"><table><thead><tr><th>Material</th><th>Qoldiq</th><th class="hide-m-col">Narxi</th><th class="r"></th></tr></thead><tbody>${L.map(x=>{const lw=(+x.qty||0)<=(+x.min||0);return `<tr><td style="cursor:pointer;white-space:normal" onclick="openItem('${x.id}')"><b>${esc(x.name)}</b>${lw?' <span class="tag t-low">Kam qoldi</span>':''}<div class="mut" style="font-size:12px">min. ${num(x.min)} ${esc(x.unit||'')}</div></td><td class="nw"><span class="qty">${num(x.qty)}</span> <span class="mut">${esc(x.unit||'')}</span></td><td class="hide-m-col nw">${money(x.price)}</td>
+      <td class="r"><button class="btn ghost sm" onclick="openMove('${x.id}','in')">+<span class="hide-m"> Kirim</span></button> <button class="btn ghost sm" onclick="openMove('${x.id}','out')">−<span class="hide-m"> Chiqim</span></button></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">Material qo\'shilmagan</div>'}</div>
+    <div class="card"><div class="card-h"><h3>Kirim-chiqim tarixi</h3></div>${mv.length?`<div class="tw"><table><tbody>${mv.map(m=>{const it=byId('stock',m.itemId)||{name:'—',unit:''};return `<tr><td><b>${esc(it.name)}</b><div class="mut" style="font-size:12px">${dateShort(m.date)} ${m.time||''} · ${esc(m.by||'')}${m.note?' · '+esc(m.note):''}</div></td><td class="r"><b style="color:${m.type==='in'?'var(--green)':'var(--red)'}">${m.type==='in'?'+':'−'}${num(m.qty)}</b></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">Hali harakat yo\'q</div>'}</div>
+  </div>`;
+}
+function openItem(id){ const x=id?byId('stock',id):{name:'',unit:'dona',qty:0,min:0,price:''};
+  openModal(mHead(id?'Materialni tahrirlash':'Yangi material')+`<div class="md-b">
+  <label class="f"><span>Nomi</span><input class="in" id="it-n" value="${esc(x.name)}" placeholder="Masalan: Anestetik (Ubistezin)"></label>
+  <div class="row"><label class="f"><span>O'lchov birligi</span><input class="in" id="it-u" value="${esc(x.unit||'')}" placeholder="dona, quti, ampula"></label><label class="f"><span>Narxi (1 birlik, so'm)</span><input class="in" id="it-p" type="number" min="0" step="1000" value="${x.price}"></label></div>
+  <div class="row">${id?'':`<label class="f"><span>Hozirgi qoldiq</span><input class="in" id="it-q" type="number" min="0" value="${x.qty}"></label>`}<label class="f"><span>Minimal qoldiq (ogohlantirish)</span><input class="in" id="it-m" type="number" min="0" value="${x.min}"></label></div></div>
+  <div class="md-f">${id?`<button class="btn danger" onclick="archive('stock','${id}')">O'chirish</button><span style="flex:1"></span>`:''}<button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn" onclick="saveItem('${id||''}')">Saqlash</button></div>`,'sm'); }
+async function saveItem(id){ const name=$('#it-n').value.trim(); if(!name) return toast('Nomini kiriting');
+  const old=id?byId('stock',id):{id:uid('m'),qty:Math.max(0,+$('#it-q').value||0)};
+  await DB.save('stock',{...old,name,unit:$('#it-u').value.trim(),price:Math.max(0,Math.round(+$('#it-p').value||0)),min:Math.max(0,+$('#it-m').value||0)}); closeModal(); render(); toast('Saqlandi'); }
+function openMove(id,type){ const x=byId('stock',id); if(!x) return;
+  openModal(mHead((type==='in'?'Kirim':'Chiqim')+' — '+esc(x.name))+`<div class="md-b">
+  <p class="mut" style="margin-bottom:14px">Hozirgi qoldiq: <b style="color:var(--ink)">${num(x.qty)} ${esc(x.unit||'')}</b></p>
+  <label class="f"><span>Miqdori (${esc(x.unit||'')})</span><input class="in" id="mv-q" type="number" min="1" style="font-size:18px;font-weight:800"></label>
+  <label class="f"><span>Izoh</span><input class="in" id="mv-n" placeholder="${type==='in'?'Yetkazib beruvchi, hujjat raqami':'Qaysi ish uchun'}"></label></div>
+  <div class="md-f"><button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn ${type==='in'?'green':''}" onclick="saveMove('${id}','${type}')">${ic('check')}Saqlash</button></div>`,'sm'); setTimeout(()=>$('#mv-q')&&$('#mv-q').focus(),50); }
+async function saveMove(id,type){ const x={...byId('stock',id)}, q=+$('#mv-q').value||0; if(q<=0) return toast('Miqdorni kiriting');
+  if(type==='out' && q>(+x.qty||0)) return toast(`Omborda faqat ${num(x.qty)} ${x.unit||''} bor`);
+  x.qty=(+x.qty||0)+(type==='in'?q:-q);
+  await DB.save('stockmoves',{id:uid('sm'),itemId:id,type,qty:q,note:$('#mv-n').value.trim(),date:today(),time:nowHM(),by:S.user.name});
+  await DB.save('stock',x); closeModal(); render(); toast(`${type==='in'?'Kirim':'Chiqim'}: ${num(q)} ${x.unit||''}`); }
+
+// ---------- Hisobotlar ----------
+function pageRep(){
+  const m=S.repM, A=S.D.appointments.filter(a=>a.date.startsWith(m)), done=A.filter(a=>a.status==='done'), P=S.D.payments.filter(p=>p.date.startsWith(m));
+  const closed=A.filter(a=>['done','noshow'].includes(a.status)); const ns=A.filter(a=>a.status==='noshow');
+  const newP=S.D.patients.filter(p=>(p.createdAt||'').startsWith(m)).length;
+  const uniq=new Set(done.map(a=>a.patientId)).size;
+  const docs=S.D.doctors.map(d=>{ const dd=done.filter(a=>a.doctorId===d.id); const v=sum(dd,'total'); return {d,cnt:dd.length,pts:new Set(dd.map(a=>a.patientId)).size,ns:ns.filter(a=>a.doctorId===d.id).length,v,sal:Math.round(v*(+d.percent||0)/100)}; }).filter(x=>x.cnt||!x.d.archived);
+  const svc={}; done.forEach(a=>(a.services||[]).forEach(id=>{ const s=byId('services',id); if(!s) return; svc[id]=svc[id]||{s,c:0,v:0}; svc[id].c++; svc[id].v+=+s.price||0; }));
+  const svcs=Object.values(svc).sort((a,b)=>b.v-a.v);
+  return `<div class="top"><div><h1>Hisobotlar</h1><p>${monthName(m)}</p></div>
+    <div class="acts"><input type="month" class="in" style="width:auto" value="${m}" onchange="if(this.value){S.repM=this.value;render()}"><button class="btn ghost" onclick="exportCSV()">${ic('down')}<span class="hide-m">Excel (CSV)</span></button></div></div>
+  <div class="kpis">
+    <div class="card kpi"><div class="l"><span class="ic b">${ic('wallet')}</span>Kassaga tushgan</div><div class="v">${short(sum(P,'amount'))} <small>so'm</small></div><div class="s">${money(sum(P,'amount'))}</div></div>
+    <div class="card kpi"><div class="l"><span class="ic g">${ic('check')}</span>Bajarilgan ishlar</div><div class="v">${short(sum(done,'total'))} <small>so'm</small></div><div class="s">${done.length} ta qabul · ${uniq} ta bemor</div></div>
+    <div class="card kpi"><div class="l"><span class="ic v">${ic('user')}</span>Yangi bemorlar</div><div class="v">${newP}</div><div class="s">shu oy bazaga qo'shilgan</div></div>
+    <div class="card kpi"><div class="l"><span class="ic r">${ic('x')}</span>Kelmay qolish</div><div class="v">${closed.length?Math.round(ns.length/closed.length*100):0}%</div><div class="s">${ns.length} ta qabul · ${money(sum(ns,'total'))}</div></div>
+  </div>
+  <div class="card" style="margin-bottom:14px"><div class="card-h"><h3>Shifokorlar${M('salary')?' va maosh':''}</h3>${M('salary')?'<span class="mut">Maosh = bajarilgan ish × foiz</span>':''}</div><div class="tw"><table><thead><tr><th>Shifokor</th><th>Qabullar</th><th>Bemorlar</th><th>Kelmadi</th><th${M('salary')?'':' class="r"'}>Bajarilgan ish</th>${M('salary')?'<th>Foiz</th><th class="r">Maosh</th>':''}</tr></thead><tbody>
+    ${docs.map(x=>`<tr><td><span style="display:flex;align-items:center;gap:8px"><i class="dot" style="background:${x.d.color}"></i><b>${esc(x.d.name)}</b></span></td><td>${x.cnt}</td><td>${x.pts}</td><td>${x.ns}</td><td${M('salary')?'':' class="r"'}>${money(x.v)}</td>${M('salary')?`<td>${x.d.percent||0}%</td><td class="r"><b style="color:var(--blue)">${money(x.sal)}</b></td>`:''}</tr>`).join('')}
+    <tr><td><b>Jami</b></td><td><b>${sum(docs,'cnt')}</b></td><td></td><td><b>${sum(docs,'ns')}</b></td><td${M('salary')?'':' class="r"'}><b>${money(sum(docs,'v'))}</b></td>${M('salary')?`<td></td><td class="r"><b>${money(sum(docs,'sal'))}</b></td>`:''}</tr>
+  </tbody></table></div></div>
+  <div class="grid2">
+    <div class="card"><div class="card-h"><h3>Xizmatlar bo'yicha</h3></div>${svcs.length?`<div class="tw"><table><thead><tr><th>Xizmat</th><th>Soni</th><th class="r">Summa</th></tr></thead><tbody>${svcs.map(x=>`<tr><td><b>${esc(x.s.name)}</b></td><td>${x.c}</td><td class="r">${money(x.v)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Ma\'lumot yo\'q</div>'}</div>
+    <div class="card"><div class="card-h"><h3>To'lov turlari</h3></div><div class="card-b">${Object.entries(METHODS).map(([k,l])=>{const v=sum(P.filter(p=>p.method===k),'amount'),tot=sum(P,'amount')||1;return `<div class="hb"><div class="hb-t"><b>${l}</b><span>${money(v)} · ${Math.round(v/tot*100)}%</span></div><div class="hb-l"><i style="width:${v/tot*100}%;background:var(--blue)"></i></div></div>`}).join('')}</div></div>
+  </div>`;
+}
+function download(name, text, type){ try{ const b=new Blob([text],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); a.remove(); }catch(e){ toast('Yuklab bo\'lmadi'); } }
+function exportCSV(){
+  const m=S.repM; const rows=[['Sana','Vaqt','Bemor','Telefon','Shifokor','Xizmatlar','Holat','Summa','To\'langan']];
+  S.D.appointments.filter(a=>a.date.startsWith(m)).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(a=>{ const p=byId('patients',a.patientId)||{}; rows.push([a.date,a.time,p.name||'',p.phone||'',dName(a.doctorId),svcNames(a),STATUS[a.status],a.total||0,apptPaid(a.id)]); });
+  download(`hisobot-${m}.csv`, '﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\n'), 'text/csv;charset=utf-8');
+}
+
+// ---------- Sozlamalar ----------
+function pageSet(){
+  const tabs=[['clinic','Klinika'],['svc','Xizmatlar'],['doc','Shifokorlar'],['users','Xodimlar'],['mod','Modullar'],['data',"Ma'lumotlar"]];
+  const body={clinic:setClinic,svc:setSvc,doc:setDoc,users:setUsers,mod:setMod,data:setData}[S.setTab]();
+  return `<div class="top"><div><h1>Sozlamalar</h1><p>${esc(S.D.settings.name||'')}</p></div></div>
+    <div style="overflow-x:auto;margin-bottom:14px"><div class="seg">${tabs.map(([k,t])=>`<button class="${S.setTab===k?'on':''}" onclick="S.setTab='${k}';render()">${t}</button>`).join('')}</div></div>${body}`;
+}
+function setClinic(){ const s=S.D.settings; return `<div class="card" style="max-width:640px"><div class="card-b" style="padding-top:18px">
+  <label class="f"><span>Klinika nomi</span><input class="in" id="sc-name" value="${esc(s.name||'')}"></label>
+  <div class="row"><label class="f"><span>Telefon</span><input class="in" id="sc-phone" value="${esc(s.phone||'')}"></label><label class="f"><span>Manzil</span><input class="in" id="sc-addr" value="${esc(s.address||'')}"></label></div>
+  <div class="row"><label class="f"><span>Ish boshlanishi</span><input class="in" type="time" step="1800" id="sc-ws" value="${s.workStart||'08:00'}"></label><label class="f"><span>Ish tugashi</span><input class="in" type="time" step="1800" id="sc-we" value="${s.workEnd||'20:00'}"></label></div>
+  <button class="btn" onclick="saveClinic()">${ic('check')}Saqlash</button></div></div>`; }
+async function saveClinic(){
+  const ws=$('#sc-ws').value||'08:00', we=$('#sc-we').value||'20:00'; if(toMin(we)<=toMin(ws)) return toast('Ish vaqti noto\'g\'ri');
+  const r=m=>fromMin(Math.round(toMin(m)/30)*30);
+  await DB.save('settings',{...S.D.settings,id:'main',name:$('#sc-name').value.trim(),phone:$('#sc-phone').value.trim(),address:$('#sc-addr').value.trim(),workStart:r(ws),workEnd:r(we)}); render(); toast('Saqlandi');
+}
+function setSvc(){ const L=S.D.services.filter(x=>!x.archived); return `<div class="card"><div class="card-h"><h3>Xizmatlar narxnomasi (${L.length})</h3><button class="btn sm" onclick="openSvc()">${ic('plus')}Qo'shish</button></div>
+  <div class="tw"><table><thead><tr><th>Xizmat</th><th class="r">Narx</th></tr></thead><tbody>${L.map(x=>`<tr class="click" onclick="openSvc('${x.id}')"><td><b>${esc(x.name)}</b></td><td class="r"><b>${money(x.price)}</b></td></tr>`).join('')||'<tr><td colspan="2" class="empty">Xizmat yo\'q</td></tr>'}</tbody></table></div></div>`; }
+function openSvc(id){ const x=id?byId('services',id):{name:'',price:''};
+  openModal(mHead(id?'Xizmatni tahrirlash':'Yangi xizmat')+`<div class="md-b"><label class="f"><span>Nomi</span><input class="in" id="sv-n" value="${esc(x.name)}"></label><label class="f"><span>Narxi (so'm)</span><input class="in" id="sv-p" type="number" step="1000" value="${x.price}"></label></div>
+  <div class="md-f">${id?`<button class="btn danger" onclick="archive('services','${id}')">O'chirish</button><span style="flex:1"></span>`:''}<button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn" onclick="saveSvc('${id||''}')">Saqlash</button></div>`,'sm'); }
+async function saveSvc(id){ const name=$('#sv-n').value.trim(), price=Math.round(+$('#sv-p').value||0); if(!name) return toast('Nomini kiriting');
+  await DB.save('services',{...(id?byId('services',id):{id:uid('s')}),name,price}); closeModal(); render(); toast('Saqlandi'); }
+function archive(coll,id){ ask("O'chirasizmi? Eski hisobotlarda saqlanib qoladi.", async()=>{ await DB.save(coll,{...byId(coll,id),archived:true}); render(); toast("O'chirildi"); }); }
+function setDoc(){ const L=S.D.doctors.filter(x=>!x.archived); return `<div class="card"><div class="card-h"><h3>Shifokorlar (${L.length})</h3><button class="btn sm" onclick="openDoc()">${ic('plus')}Qo'shish</button></div>
+  <div class="tw"><table><thead><tr><th>Shifokor</th><th>Mutaxassislik</th><th>Telefon</th><th class="r">${M('salary')?'Foiz':''}</th></tr></thead><tbody>${L.map(d=>`<tr class="click" onclick="openDoc('${d.id}')"><td><div class="who"><div class="av" style="background:${d.color}1A;color:${d.color}">${initials(d.name)}</div><b>${esc(d.name)}</b></div></td><td>${esc(d.spec||'')}</td><td>${esc(d.phone||'')}</td><td class="r"><b>${M('salary')?(d.percent||0)+'%':''}</b></td></tr>`).join('')||'<tr><td colspan="4" class="empty">Shifokor yo\'q</td></tr>'}</tbody></table></div></div>`; }
+function openDoc(id){
+  const mx=(S.lic&&S.lic.maxDoctors)||0; if (!id && !DEMO && mx && S.D.doctors.filter(x=>!x.archived).length>=mx) return toast(`Tarifingizda ${mx} ta shifokor. Kengaytirish uchun: ${(S.sub&&S.sub.phone)||OWNER_PHONE}`);
+  const d=id?byId('doctors',id):{name:'Dr. ',spec:'',phone:'',percent:30,color:COLORS[S.D.doctors.length%COLORS.length]};
+  openModal(mHead(id?'Shifokorni tahrirlash':'Yangi shifokor')+`<div class="md-b"><label class="f"><span>F.I.Sh.</span><input class="in" id="dc-n" value="${esc(d.name)}"></label>
+  <div class="row"><label class="f"><span>Mutaxassislik</span><input class="in" id="dc-s" value="${esc(d.spec||'')}" placeholder="Terapevt"></label><label class="f"><span>Telefon</span><input class="in" id="dc-p" value="${esc(d.phone||'')}"></label></div>
+  <label class="f" style="${M('salary')?'':'display:none'}"><span>Ishlagan summadan foizi (%)</span><input class="in" id="dc-pc" type="number" min="0" max="100" value="${d.percent||0}"></label>
+  <div class="f"><span class="fl">Kalendardagi rangi</span><div class="colors">${COLORS.map(c=>`<label><input type="radio" name="dc-c" value="${c}" ${c===d.color?'checked':''}><i style="background:${c}"></i></label>`).join('')}</div></div></div>
+  <div class="md-f">${id?`<button class="btn danger" onclick="archive('doctors','${id}')">O'chirish</button><span style="flex:1"></span>`:''}<button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn" onclick="saveDoc('${id||''}')">Saqlash</button></div>`); }
+async function saveDoc(id){ const name=$('#dc-n').value.trim(); if(name.length<3) return toast('Ismni kiriting');
+  await DB.save('doctors',{...(id?byId('doctors',id):{id:uid('d')}),name,spec:$('#dc-s').value.trim(),phone:$('#dc-p').value.trim(),percent:Math.min(100,Math.max(0,+$('#dc-pc').value||0)),color:($('input[name=dc-c]:checked')||{}).value||COLORS[0]}); closeModal(); render(); toast('Saqlandi'); }
+function setUsers(){ return `<div class="card"><div class="card-h"><h3>Xodimlar va kirish huquqi</h3><button class="btn sm" onclick="openUser()">${ic('plus')}Qo'shish</button></div>
+  <div class="tw"><table><thead><tr><th>Xodim</th><th>Login</th><th>Roli</th><th>Shifokor</th></tr></thead><tbody>${S.D.users.map(u=>`<tr class="click" onclick="openUser('${u.id}')"><td><div class="who"><div class="av">${initials(u.name)}</div><b>${esc(u.name)}</b></div></td><td>${esc(u.login)}</td><td><span class="tag t-new">${ROLES[u.role]}</span></td><td>${u.doctorId?esc(dName(u.doctorId)):'—'}</td></tr>`).join('')}</tbody></table></div>
+  <div class="card-b" style="padding-top:14px"><p class="mut" style="line-height:1.6"><b>Administrator</b> va <b>Rahbar</b> — hamma bo'limlar. <b>Shifokor</b> — faqat o'z qabullari va bemorlari; kassa, hisobot va sozlamalarni ko'rmaydi.</p></div></div>`; }
+function openUser(id){ const u=id?byId('users',id):{name:'',login:'',role:'admin',doctorId:''};
+  openModal(mHead(id?'Xodimni tahrirlash':'Yangi xodim')+`<div class="md-b"><label class="f"><span>Ismi</span><input class="in" id="us-n" value="${esc(u.name)}"></label>
+  <div class="row"><label class="f"><span>Login</span><input class="in" id="us-l" autocapitalize="none" value="${esc(u.login)}"></label><label class="f"><span>${id?'Yangi parol (o\'zgartirmasangiz bo\'sh qoldiring)':'Parol'}</span><input class="in" id="us-p" type="text" autocomplete="new-password"></label></div>
+  <div class="row"><label class="f"><span>Roli</span><select class="in" id="us-r" onchange="$('#us-dw').style.display=this.value==='doctor'?'':'none'">${Object.entries(ROLES).map(([k,v])=>`<option value="${k}" ${u.role===k?'selected':''}>${v}</option>`).join('')}</select></label>
+  <label class="f" id="us-dw" style="${u.role==='doctor'?'':'display:none'}"><span>Qaysi shifokor</span><select class="in" id="us-d">${S.D.doctors.filter(d=>!d.archived).map(d=>`<option value="${d.id}" ${u.doctorId===d.id?'selected':''}>${esc(d.name)}</option>`).join('')}</select></label></div></div>
+  <div class="md-f">${id&&id!==S.user.id?`<button class="btn danger" onclick="delUser('${id}')">O'chirish</button><span style="flex:1"></span>`:''}<button class="btn ghost" onclick="closeModal()">Bekor</button><button class="btn" onclick="saveUser('${id||''}')">Saqlash</button></div>`); }
+async function saveUser(id){
+  const name=$('#us-n').value.trim(), login=$('#us-l').value.trim().toLowerCase(), pass=$('#us-p').value, role=$('#us-r').value;
+  const mn=DEMO?4:6; if(!name||!login) return toast('Ism va loginni kiriting'); if(!id && pass.length<mn) return toast(`Parol kamida ${mn} ta belgi`); if(id && pass && pass.length<mn) return toast(`Parol kamida ${mn} ta belgi`);
+  if(S.D.users.some(u=>u.login===login && u.id!==id)) return toast('Bu login band');
+  const u={...(id?byId('users',id):{id:uid('u')}),name,login,role,doctorId:role==='doctor'?$('#us-d').value:''}; if(pass) u.newPass=pass;
+  await DB.save('users',u); closeModal(); render(); toast('Saqlandi');
+}
+function delUser(id){ ask("Xodimni o'chirasizmi? U endi tizimga kira olmaydi.", async()=>{ await DB.del('users',id); render(); toast("O'chirildi"); }); }
+function planCard(){
+  const sb=S.sub||{}, mx=(S.lic&&S.lic.maxDoctors)||0, ph=sb.phone||OWNER_PHONE;
+  return `<div class="plan"><span class="ic b" style="width:46px;height:46px;border-radius:14px">${ic('trend')}</span><div style="flex:1;min-width:180px"><small class="mut">Tarif</small><br><b>${DEMO?'Demo — hamma modullar':esc((S.lic&&S.lic.planName)||'—')}</b>
+    <div class="mut" style="margin-top:2px">${sb.until?dateShort(sb.until)+' gacha faol':''}${mx?` · ${mx} ta shifokorgacha`:' · shifokorlar soni cheklanmagan'}</div></div>
+    <a class="btn ghost sm" href="tel:${digits(ph)}">${ic('phone')}Tarifni o'zgartirish</a></div>`;
+}
+function setMod(){ const s=S.D.settings, md=s.modules||{}, ph=(S.sub&&S.sub.phone)||OWNER_PHONE;
+  const own = k => k==='dental'||k==='telegram';
+  return `${planCard()}<div class="card" style="max-width:760px"><div class="card-b" style="padding-top:4px">
+  ${Object.entries(MODS).map(([k,v])=>`<div class="mod-row"><span class="ic ${M(k)?'b':''}" style="${M(k)?'':'background:var(--bg);color:var(--muted)'}">${ic(v.i)}</span><div class="sp"><b>${v.t}</b><small>${v.d}</small></div>
+    ${!M(k)?`<a class="tag t-cancel" href="tel:${digits(ph)}" style="text-decoration:none">Ulanmagan</a>`:own(k)?`<label class="tgl" title="Klinikada yoqish/o'chirish"><input type="checkbox" ${md[k]!==false?'checked':''} onchange="setModule('${k}',this.checked)"><i></i></label>`:'<span class="tag t-done">Ulangan</span>'}</div>`).join('')}
+  <p class="mut" style="padding:14px 0 4px;line-height:1.6">Yangi modul ulash yoki tarifni o'zgartirish uchun: <b style="color:var(--ink)">${esc(ph)}</b></p>
+  ${M('telegram')&&md.telegram!==false?`<div style="padding:14px 0">${tgLink()?`
+    <div class="pp-sel"><div style="min-width:0"><b>Klinikangiz boti — bemorlarga beriladigan havola</b><small style="word-break:break-all">${esc(tgLink())}</small></div><button class="btn sm" onclick="copyTxt('${esc(tgLink())}')">Nusxa olish</button></div>
+    <p class="mut" style="margin-top:10px;line-height:1.6">Bemor botni ochib <b style="color:var(--ink)">«📋 Kabinetim»</b> tugmasini bosadi va raqamini tasdiqlaydi — qabullari, to'lovlari va tish xaritasini o'zi ko'radi. Eslatmalar shu botdan keladi. Havolani registraturada osib qo'ying yoki bemorga yuboring. Ulanganlar: <b>${S.D.patients.filter(p=>p.tgChatId).length}</b> / ${S.D.patients.length}.</p>`
+    :`<div class="pp-sel"><div><b>Klinika botingiz hali yaratilmagan</b><small>@${CRM_BOT} → «🤖 Klinika boti» — 1 daqiqa, token kerak emas</small></div><a class="btn sm" href="https://t.me/${CRM_BOT}" target="_blank" rel="noopener">Ochish</a></div>
+    <p class="mut" style="margin-top:10px;line-height:1.6">Bot klinikangiz nomi bilan yaratiladi va o'zi sozlanadi. Shundan keyin bemorlarga eslatmalar boradi va har bir bemor o'z kabinetini ko'radi.</p>`}</div>`:''}
+  </div></div>`; }
+async function setModule(k,v){ if(!M(k)) return toast('Bu modul tarifingizda yo\'q'); const s={...S.D.settings}; s.modules={...(s.modules||{}),[k]:v}; await DB.save('settings',s); render(); toast(v?'Yoqildi':'O\'chirildi'); }
+const tgLink = () => (S.D.settings||{}).botUsername ? `https://t.me/${S.D.settings.botUsername}` : (DEMO ? 'https://t.me/nurdental_bot' : '');
+function copyTxt(t){ try{ navigator.clipboard.writeText(t).then(()=>toast('Nusxa olindi'),()=>toast(t)); }catch(e){ toast(t); } }
+function setData(){ return `<div class="card" style="max-width:720px"><div class="card-b" style="padding-top:6px">
+  <div class="switch"><div><b>Zaxira nusxa (JSON)</b><small>Barcha ma'lumotlarni bitta faylga yuklab olish</small></div><button class="btn ghost sm" onclick="backup()">${ic('down')}Yuklab olish</button></div>
+  <div class="switch"><div><b>Ma'lumotlar qayerda saqlanadi?</b><small>${DEMO?'Demo rejim: faqat shu brauzerda. Haqiqiy klinikada — Google Sheets\'da, har qanday qurilmadan kirish mumkin.':'Google Sheets\'da, xavfsiz. Har qanday qurilmadan login-parol bilan kirasiz.'}</small></div></div>
+  ${S.sub&&S.sub.until?`<div class="switch"><div><b>Obuna · ${esc((S.lic&&S.lic.planName)||'')}</b><small>${dateShort(S.sub.until)} gacha faol</small></div><span class="tag t-done">Faol</span></div>`:''}
+  ${DEMO?`<div class="switch"><div><b>Demo ma'lumotlarni qayta tiklash</b><small>Kiritilgan barcha o'zgarishlar o'chadi</small></div><button class="btn danger sm" onclick="ask('Demo ma\\'lumotlar boshidan yaratiladi. Davom etasizmi?',()=>{LS.del('mv_demo');DB.load().then(()=>{render();toast('Tiklandi')})},'Tiklash')">Tiklash</button></div>`:''}
+  </div></div>`; }
+function backup(){ const d={...S.D}; d.users=d.users.map(({pass,...u})=>u); download(`zaxira-${today()}.json`, JSON.stringify(d,null,1), 'application/json'); }
+
+// ---------- Ishga tushirish ----------
+(async function init(){
+  const ss=LS.get('mv_sess',null);
+  if (ss && ss.user) { S.token=ss.token; S.user=ss.user;
+    const c = DEMO ? null : LS.get(CK(), null);
+    if (c && c.uid===S.user.id) { S.D={...emptyD(), ...c.D}; S.cursor=c.cursor||0; S.sub=c.sub; S.lic=c.lic; render(); }   // darhol ochiladi, keyin yangilanadi
+    try { await DB.load(); } catch(e){ if (e.code==='AUTH') { LS.del('mv_sess'); S.user=null; } else if (e.code==='SUB') S.sub={expired:true}; else toast("Internet yo'q — oxirgi saqlangan ma'lumotlar ko'rsatilmoqda"); }
+  }
+  render();
+  if (API) { setInterval(sync, 20000); document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) sync(); }); }
+  setInterval(()=>{ if(S.user && S.page==='cal' && !$('#modal-root').innerHTML && S.calDate===today()) { const c=$('#cal'); const st=c&&c.scrollTop; render(); const c2=$('#cal'); if(c2&&st!=null) c2.scrollTop=st; } }, 60000);
+  try { if ('serviceWorker' in navigator && location.protocol==='https:' && !location.hostname.endsWith('claude.ai')) navigator.serviceWorker.register('sw.js').catch(()=>{}); } catch(e){}
+})();
+</script>
+</body>
+</html>
